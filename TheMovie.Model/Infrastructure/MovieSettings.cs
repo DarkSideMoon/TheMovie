@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TheMovie.Model.Infrastructure
 {
-    public class Configuration
+    public class MovieSettings
     {
         /// <summary>
         /// Key of application TMDb
