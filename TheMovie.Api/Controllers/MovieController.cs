@@ -50,7 +50,35 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(Movie), 200)]
         public async Task<Movie> Get(int id)
         {
-            return await _client.GetMovieAsync(id, LanguageType.English);
+            try
+            {
+                return await _client.GetMovieAsync(id, LanguageType.English);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Get Movie by id and language
+        /// </summary>
+        /// <param name="id">Id of movie</param>
+        /// <param name="language">Language of client</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("getByLanguage")]
+        [ProducesResponseType(typeof(Movie), 200)]
+        public async Task<Movie> Get(int id, string language)
+        {
+            try
+            {
+                return await _client.GetMovieAsync(id, LanguageType.English);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
