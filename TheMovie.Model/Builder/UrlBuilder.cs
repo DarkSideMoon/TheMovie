@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TheMovie.Model.Util;
 
@@ -13,11 +14,17 @@ namespace TheMovie.Model.Builder
         /// Dictionary faster than NameValueCollection 
         /// https://www.dotnetperls.com/namevaluecollection
         /// </summary>
-        public Dictionary<string, string> QueryParams { get; set; }
+        private Dictionary<string, string> _queryParams = new Dictionary<string, string>();
 
         public UrlBuilder()
         {
             _urlBuilder = new StringBuilder();
+        }
+
+        public UrlBuilder(string baseUrl)
+        {
+            _urlBuilder = new StringBuilder();
+            _urlBuilder.Append(baseUrl);
         }
 
         /// <summary>
@@ -53,7 +60,7 @@ namespace TheMovie.Model.Builder
         /// <param name="value"></param>
         public UrlBuilder SetQueryParam(string name, string value)
         {
-            QueryParams.Add(name, value);
+            _queryParams.Add(name, value);
             return this;
         }
 
@@ -64,7 +71,7 @@ namespace TheMovie.Model.Builder
         public UrlBuilder SetQueryParams(Dictionary<string, string> values)
         {
             foreach (var kv in values)
-                QueryParams.Add(kv.Key, kv.Value);
+                _queryParams.Add(kv.Key, kv.Value);
 
             return this;
         }
@@ -77,7 +84,7 @@ namespace TheMovie.Model.Builder
         public UrlBuilder SetQueryParams(object values)
         {
             foreach (var kv in values.ToKeyValuePairs())
-                QueryParams.Add(kv.Key, kv.Value.ToString());
+                _queryParams.Add(kv.Key, kv.Value.ToString());
 
             return this;
         }
@@ -86,6 +93,23 @@ namespace TheMovie.Model.Builder
         /// Build all url
         /// </summary>
         /// <returns></returns>
-        public string Build() => _urlBuilder.ToString();
+        public string Build()
+        {
+            if (_queryParams.Any())
+            {
+                _urlBuilder.Append("?");
+                foreach (var queryParam in _queryParams)
+                {
+                    string query = $"{queryParam.Key}={queryParam.Value}";
+
+                    if (_queryParams.LastOrDefault().Key != queryParam.Key)
+                        query += "&";
+
+                    _urlBuilder.Append(query);
+                }
+            }
+
+            return _urlBuilder.Replace(" ", "").ToString();
+        } 
     }
 }

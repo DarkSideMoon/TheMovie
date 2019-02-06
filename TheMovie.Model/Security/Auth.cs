@@ -37,8 +37,6 @@ namespace TheMovie.Model.Security
 
         public async Task<bool> DeleteUserSessionAsync(string requestToken)
         {
-            //string test = new UrlBuilder().AddPath("").SetQueryId("").Build();
-
             string query = $"authentication/session/new?api_key={_apiKey}" +
                            $"&request_token={requestToken}";
 

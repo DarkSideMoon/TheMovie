@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using TheMovie.Model.Base;
+using TheMovie.Model.Interfaces;
 
 namespace TheMovie.Api.Controllers
 {
@@ -14,6 +16,20 @@ namespace TheMovie.Api.Controllers
     [Route("api/[controller]")]
     public class ConfigurationController : Controller
     {
+        /// <summary>
+        /// Client for movie service
+        /// </summary>
+        private readonly IClient _client;
+
+        /// <summary>
+        /// The constructor of configurations
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public ConfigurationController(IServiceProvider serviceProvider)
+        {
+            _client = serviceProvider.GetService<IClient>();
+        }
+
         /// <summary>
         /// Return list of languages in service
         /// </summary>
@@ -35,6 +51,19 @@ namespace TheMovie.Api.Controllers
             };
 
             return Ok(languages);
+        }
+
+        /// <summary>
+        /// Return list of genres in service
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("genres")]
+        [ProducesResponseType(typeof(List<Genre>), 200)]
+        public async Task<IActionResult> GetGenres()
+        {
+            var genres = await _client.GetGenresAsync(LanguageType.English);
+            return Ok(genres);
         }
     }
 }

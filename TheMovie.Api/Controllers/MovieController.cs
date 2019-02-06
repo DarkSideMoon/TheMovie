@@ -80,5 +80,48 @@ namespace TheMovie.Api.Controllers
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Get popular movie by genre
+        /// </summary>
+        /// <param name="genre">Genre</param>
+        /// <param name="language">Language of client</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("getPopularMoviesByGenre")]
+        [ProducesResponseType(typeof(List<Movie>), 200)]
+        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenre(int genre, string language)
+        {
+            try
+            {
+                return await _client.GetPopularMoviesByGenreAsync(genre, language);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Get popular movie by genre
+        /// </summary>
+        /// <param name="genre">Genre</param>
+        /// <param name="year">Year of release movie</param>
+        /// <param name="language">Language of client</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("getPopularMoviesByGenreWithYear")]
+        [ProducesResponseType(typeof(List<Movie>), 200)]
+        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
+        {
+            try
+            {
+                return await _client.GetPopularMoviesByGenreWithYearAsync(genre, year, language);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
