@@ -22,5 +22,11 @@ namespace TheMovie.Model.Interfaces
         IEnumerable<Movie> GetPopularMoviesByGenreWithYear(int genre, int year, string language);
 
         Task<IEnumerable<Movie>> GetPopularMoviesByGenreWithYearAsync(int genre, int year, string language);
+
+        IEnumerable<Movie> GetBestMoviesByYear(int genre, int year, string language);
+
+        Task<IEnumerable<Movie>> GetBestMoviesByYearAsync(int genre, int year, string language);
+
+
     }
 }

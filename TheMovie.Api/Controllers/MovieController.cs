@@ -103,7 +103,7 @@ namespace TheMovie.Api.Controllers
         }
 
         /// <summary>
-        /// Get popular movie by genre
+        /// Get popular movie by genre with year
         /// </summary>
         /// <param name="genre">Genre</param>
         /// <param name="year">Year of release movie</param>
@@ -117,6 +117,27 @@ namespace TheMovie.Api.Controllers
             try
             {
                 return await _client.GetPopularMoviesByGenreWithYearAsync(genre, year, language);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Get best movie by the year
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("getBestMoviesByYear")]
+        [ProducesResponseType(typeof(List<Movie>), 200)]
+        public async Task<IEnumerable<Movie>> GetBestMoviesByYearAsync(int genre, int year, string language)
+        {
+            try
+            {
+                return await _client.GetBestMoviesByYearAsync(genre, year, language);
             }
             catch (Exception ex)
             {

@@ -58,7 +58,7 @@ namespace TheMovie.Model.Base
         {
             get
             {
-                if (!_backgroundImage.Contains("image.tmdb.org"))
+                if (_backgroundImage != null && !_backgroundImage.Contains("image.tmdb.org"))
                     return "https://image.tmdb.org/t/p/w780/" + _backgroundImage;
 
                 return _backgroundImage;
@@ -72,7 +72,7 @@ namespace TheMovie.Model.Base
         {
             get
             {
-                if (!_posterImage.Contains("image.tmdb.org"))
+                if (_posterImage != null && !_posterImage.Contains("image.tmdb.org"))
                     return "https://image.tmdb.org/t/p/w780/" + _posterImage;
 
                 return _posterImage;

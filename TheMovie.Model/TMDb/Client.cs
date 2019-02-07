@@ -64,18 +64,7 @@ namespace TheMovie.Model.TMDb
                 })
                 .Build();
 
-            RestRequest request = new RestRequest(query, Method.GET);
-
-            try
-            {
-                IRestResponse<IEnumerable<Movie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Movie>>(request);
-                var jsonMovies = JObject.Parse(response.Content);
-                return JsonConvert.DeserializeObject<IEnumerable<Movie>>(jsonMovies["results"].ToString());
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return await ExecuteQuery(query);
         }
 
         public IEnumerable<Movie> GetPopularMoviesByGenreWithYear(int genre, int year, string language) =>
@@ -94,18 +83,26 @@ namespace TheMovie.Model.TMDb
                 })
                 .Build();
 
-            RestRequest request = new RestRequest(query, Method.GET);
+            return await ExecuteQuery(query);
+        }
 
-            try
-            {
-                IRestResponse<IEnumerable<Movie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Movie>>(request);
-                var jsonMovies = JObject.Parse(response.Content);
-                return JsonConvert.DeserializeObject<IEnumerable<Movie>>(jsonMovies["results"].ToString());
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+        public IEnumerable<Movie> GetBestMoviesByYear(int genre, int year, string language) =>
+            GetBestMoviesByYearAsync(genre, year, language).Result;
+
+        public async Task<IEnumerable<Movie>> GetBestMoviesByYearAsync(int genre, int year, string language)
+        {
+            string query = new UrlBuilder("discover/movie")
+                .SetQueryParams(new
+                {
+                    api_key = _movieSettings.ApiKey,
+                    language = language,
+                    sort_by = "vote_average.desc",
+                    primary_release_year = year,
+                    with_genres = genre
+                })
+                .Build();
+
+            return await ExecuteQuery(query);
         }
 
         #endregion
@@ -132,6 +129,26 @@ namespace TheMovie.Model.TMDb
                 IRestResponse<IEnumerable<Genre>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Genre>>(request);
                 var jsonGenres = JObject.Parse(response.Content);
                 return JsonConvert.DeserializeObject<IEnumerable<Genre>>(jsonGenres["genres"].ToString());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Helpers method
+
+        private async Task<IEnumerable<Movie>> ExecuteQuery(string query)
+        {
+            RestRequest request = new RestRequest(query, Method.GET);
+
+            try
+            {
+                IRestResponse<IEnumerable<Movie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Movie>>(request);
+                var jsonMovies = JObject.Parse(response.Content);
+                return JsonConvert.DeserializeObject<IEnumerable<Movie>>(jsonMovies["results"].ToString());
             }
             catch (Exception ex)
             {
