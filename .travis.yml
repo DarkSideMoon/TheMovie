@@ -4,8 +4,6 @@ sudo: required
 solution: TheMovie.sln
 mono: none
 
-install:
-  - travis_wait dotnet restore TheMovie.sln
-
 script:
+- dotnet restore TheMovie.sln
 - dotnet build TheMovie.sln
