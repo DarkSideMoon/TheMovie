@@ -1,0 +1,10 @@
+image: Visual Studio 2017
+
+build_script:
+  # dotnet info
+  - ps: dotnet --info
+  # Run dotnet new 
+  - ps: dotnet restore TheMovie.sln
+  - ps: dotnet build TheMovie.sln
+
+version: 0.0.1.{build}
