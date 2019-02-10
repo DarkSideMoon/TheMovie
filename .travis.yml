@@ -5,5 +5,5 @@ solution: TheMovie.sln
 mono: none
 
 script:
-- dotnet restore TheMovie.sln
-- dotnet build TheMovie.sln
+- dotnet restore
+- dotnet build
