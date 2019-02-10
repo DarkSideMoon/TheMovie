@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using TheMovie.Model.Base;
 using TheMovie.Model.Infrastructure;
 using TheMovie.Model.Interfaces;
-using TheMovie.Model.TMDb;
 
 namespace TheMovie.Api.Controllers
 {
@@ -30,7 +29,7 @@ namespace TheMovie.Api.Controllers
         private readonly IClient _client;
 
         /// <summary>
-        /// Movie controller
+        /// Movie constructor
         /// </summary>
         /// <param name="configurationOption">MovieSettings of service</param>
         /// <param name="serviceProvider">Service provider for DI</param>
@@ -89,8 +88,8 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getPopularMoviesByGenre")]
-        [ProducesResponseType(typeof(List<Movie>), 200)]
-        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenre(int genre, string language)
+        [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenre(int genre, string language)
         {
             try
             {
@@ -111,8 +110,8 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getPopularMoviesByGenreWithYear")]
-        [ProducesResponseType(typeof(List<Movie>), 200)]
-        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
+        [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
         {
             try
             {
@@ -127,13 +126,14 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Get best movie by the year
         /// </summary>
+        /// <param name="genre"></param>
         /// <param name="year"></param>
         /// <param name="language"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("getBestMoviesByYear")]
-        [ProducesResponseType(typeof(List<Movie>), 200)]
-        public async Task<IEnumerable<Movie>> GetBestMoviesByYearAsync(int genre, int year, string language)
+        [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        public async Task<IEnumerable<ShortMovie>> GetBestMoviesByYearAsync(int genre, int year, string language)
         {
             try
             {

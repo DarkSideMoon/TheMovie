@@ -10,6 +10,7 @@ using TheMovie.Model.Base;
 using TheMovie.Model.Builder;
 using TheMovie.Model.Infrastructure;
 using TheMovie.Model.Interfaces;
+using TheMovie.Model.ViewModel;
 
 namespace TheMovie.Model.TMDb
 {
@@ -49,10 +50,10 @@ namespace TheMovie.Model.TMDb
             }
         }
 
-        public IEnumerable<Movie> GetPopularMoviesByGenre(int genre, string language) =>
+        public IEnumerable<ShortMovie> GetPopularMoviesByGenre(int genre, string language) =>
             GetPopularMoviesByGenreAsync(genre, language).Result;
 
-        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenreAsync(int genre, string language)
+        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreAsync(int genre, string language)
         {
             string query = new UrlBuilder("discover/movie")
                 .SetQueryParams(new
@@ -67,10 +68,10 @@ namespace TheMovie.Model.TMDb
             return await ExecuteQuery(query);
         }
 
-        public IEnumerable<Movie> GetPopularMoviesByGenreWithYear(int genre, int year, string language) =>
+        public IEnumerable<ShortMovie> GetPopularMoviesByGenreWithYear(int genre, int year, string language) =>
             GetPopularMoviesByGenreWithYearAsync(genre, year, language).Result;
 
-        public async Task<IEnumerable<Movie>> GetPopularMoviesByGenreWithYearAsync(int genre, int year, string language)
+        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYearAsync(int genre, int year, string language)
         {
             string query = new UrlBuilder("discover/movie")
                 .SetQueryParams(new
@@ -86,10 +87,10 @@ namespace TheMovie.Model.TMDb
             return await ExecuteQuery(query);
         }
 
-        public IEnumerable<Movie> GetBestMoviesByYear(int genre, int year, string language) =>
+        public IEnumerable<ShortMovie> GetBestMoviesByYear(int genre, int year, string language) =>
             GetBestMoviesByYearAsync(genre, year, language).Result;
 
-        public async Task<IEnumerable<Movie>> GetBestMoviesByYearAsync(int genre, int year, string language)
+        public async Task<IEnumerable<ShortMovie>> GetBestMoviesByYearAsync(int genre, int year, string language)
         {
             string query = new UrlBuilder("discover/movie")
                 .SetQueryParams(new
@@ -107,7 +108,7 @@ namespace TheMovie.Model.TMDb
 
         #endregion
 
-        #region Implementation IFind interface
+        #region Implementation IMovieConfiguration interface
 
         public IEnumerable<Genre> GetGenres(string language) => GetGenresAsync(language).Result;
 
@@ -138,17 +139,40 @@ namespace TheMovie.Model.TMDb
 
         #endregion
 
+        #region Implementation ISearch interface
+
+        public IEnumerable<ShortMovie> Search(SearchViewModel searchViewModel) => SearchAsync(searchViewModel).Result;
+
+        public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
+        {
+            string query = new UrlBuilder("search/movie")
+                .SetQueryParams(new
+                {
+                    api_key = _movieSettings.ApiKey,
+                    language = searchViewModel.Language,
+                    query = searchViewModel.QueryName,
+                    include_adult = searchViewModel.IsAdult,
+                    region = searchViewModel.Region,
+                    year = searchViewModel.Year
+                })
+                .Build();
+
+            return await ExecuteQuery(query);
+        }
+
+        #endregion
+
         #region Helpers method
 
-        private async Task<IEnumerable<Movie>> ExecuteQuery(string query)
+        private async Task<IEnumerable<ShortMovie>> ExecuteQuery(string query)
         {
             RestRequest request = new RestRequest(query, Method.GET);
 
             try
             {
-                IRestResponse<IEnumerable<Movie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Movie>>(request);
+                IRestResponse<IEnumerable<ShortMovie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<ShortMovie>>(request);
                 var jsonMovies = JObject.Parse(response.Content);
-                return JsonConvert.DeserializeObject<IEnumerable<Movie>>(jsonMovies["results"].ToString());
+                return JsonConvert.DeserializeObject<IEnumerable<ShortMovie>>(jsonMovies["results"].ToString());
             }
             catch (Exception ex)
             {

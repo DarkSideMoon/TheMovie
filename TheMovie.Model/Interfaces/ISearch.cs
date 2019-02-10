@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using TheMovie.Model.Base;
+using TheMovie.Model.ViewModel;
 
 namespace TheMovie.Model.Interfaces
 {
@@ -9,5 +12,8 @@ namespace TheMovie.Model.Interfaces
     /// </summary>
     public interface ISearch
     {
+        IEnumerable<ShortMovie> Search(SearchViewModel searchViewModel);
+
+        Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel);
     }
 }

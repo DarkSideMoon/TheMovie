@@ -7,7 +7,7 @@ namespace TheMovie.Model.Interfaces
     /// <summary>
     /// Aggregation interface of smaller for movie client
     /// </summary>
-    public interface IClient : IFind, IMovieConfiguration
+    public interface IClient : IFind, ISearch, IMovieConfiguration
     {
     }
 }
