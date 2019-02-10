@@ -3,7 +3,7 @@ dist: trusty
 sudo: required
 solution: TheMovie.sln
 mono: none
-dotnet: latest
+dotnet: 2.2.103
 
 script:
  - dotnet --version
