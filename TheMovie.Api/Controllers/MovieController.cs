@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using TheMovie.Api.Filters;
 using TheMovie.Model.Base;
 using TheMovie.Model.Infrastructure;
 using TheMovie.Model.Interfaces;
@@ -46,17 +47,12 @@ namespace TheMovie.Api.Controllers
         /// <param name="id">Id of movie</param>
         /// <returns></returns>
         [HttpGet]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(Movie), 200)]
-        public async Task<Movie> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            try
-            {
-                return await _client.GetMovieAsync(id, LanguageType.English);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movie = await _client.GetMovieAsync(id, LanguageType.English);
+            return Ok(movie);
         }
 
         /// <summary>
@@ -67,17 +63,12 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getByLanguage")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(Movie), 200)]
-        public async Task<Movie> Get(int id, string language)
+        public async Task<IActionResult> Get(int id, string language)
         {
-            try
-            {
-                return await _client.GetMovieAsync(id, LanguageType.English);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movie = await _client.GetMovieAsync(id, language);
+            return Ok(movie);
         }
 
         /// <summary>
@@ -88,17 +79,12 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getPopularMoviesByGenre")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
-        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenre(int genre, string language)
+        public async Task<IActionResult> GetPopularMoviesByGenre(int genre, string language)
         {
-            try
-            {
-                return await _client.GetPopularMoviesByGenreAsync(genre, language);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movies = await _client.GetPopularMoviesByGenreAsync(genre, language);
+            return Ok(movies);
         }
 
         /// <summary>
@@ -110,17 +96,12 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getPopularMoviesByGenreWithYear")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
-        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
+        public async Task<IActionResult> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
         {
-            try
-            {
-                return await _client.GetPopularMoviesByGenreWithYearAsync(genre, year, language);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movies = await _client.GetPopularMoviesByGenreWithYearAsync(genre, year, language);
+            return Ok(movies);
         }
 
         /// <summary>
@@ -132,17 +113,12 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("getBestMoviesByYear")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
-        public async Task<IEnumerable<ShortMovie>> GetBestMoviesByYearAsync(int genre, int year, string language)
+        public async Task<IActionResult> GetBestMoviesByYearAsync(int genre, int year, string language)
         {
-            try
-            {
-                return await _client.GetBestMoviesByYearAsync(genre, year, language);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movies = await _client.GetBestMoviesByYearAsync(genre, year, language);
+            return Ok(movies);
         }
     }
 }

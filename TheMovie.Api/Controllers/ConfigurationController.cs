@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using TheMovie.Api.Filters;
 using TheMovie.Model.Base;
 using TheMovie.Model.Interfaces;
 
@@ -36,6 +37,7 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("languages")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<Language>), 200)]
         public IActionResult GetLanguages()
         {
@@ -59,6 +61,7 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("genres")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<Genre>), 200)]
         public async Task<IActionResult> GetGenres()
         {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using TheMovie.Api.Filters;
 using TheMovie.Model.Base;
 using TheMovie.Model.Interfaces;
 using TheMovie.Model.ViewModel;
@@ -41,17 +43,12 @@ namespace TheMovie.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("search")]
+        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
-        public async Task<IEnumerable<ShortMovie>> Search([FromBody] SearchViewModel searchViewModel)
+        public async Task<IActionResult> Search([FromBody] SearchViewModel searchViewModel)
         {
-            try
-            {
-                return await _client.SearchAsync(searchViewModel);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var movies = await _client.SearchAsync(searchViewModel);
+            return Ok(movies);
         }
     }
 }
