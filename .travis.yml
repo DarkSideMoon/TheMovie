@@ -3,7 +3,9 @@ dist: trusty
 sudo: required
 solution: TheMovie.sln
 mono: none
+dotnet: 2.2.0
 
 script:
-- dotnet restore
-- dotnet build
+ - dotnet --version
+ - dotnet restore
+ - dotnet build
