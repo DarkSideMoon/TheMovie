@@ -87,6 +87,27 @@ namespace TheMovie.Model.TMDb
             return await ExecuteQuery(query);
         }
 
+        public IEnumerable<ShortMovie> GetPopularMoviesByGenreWithYearPage(int genre, int year, int pageNumber,
+            string language) => GetPopularMoviesByGenreWithYearPageAsync(genre, year, pageNumber, language).Result;
+
+        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYearPageAsync(int genre, int year,
+            int pageNumber, string language)
+        {
+            string query = new UrlBuilder("discover/movie")
+                .SetQueryParams(new
+                {
+                    api_key = _movieSettings.ApiKey,
+                    language = language,
+                    sort_by = "popularity.desc",
+                    primary_release_year = year,
+                    with_genres = genre,
+                    page = pageNumber
+                })
+                .Build();
+
+            return await ExecuteQuery(query);
+        }
+
         public IEnumerable<ShortMovie> GetBestMoviesByYear(int genre, int year, string language) =>
             GetBestMoviesByYearAsync(genre, year, language).Result;
 

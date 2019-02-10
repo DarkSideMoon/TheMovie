@@ -10,9 +10,6 @@ using TheMovie.Model.Base;
 using TheMovie.Model.Interfaces;
 using TheMovie.Model.ViewModel;
 
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace TheMovie.Api.Controllers
 {
     /// <summary>

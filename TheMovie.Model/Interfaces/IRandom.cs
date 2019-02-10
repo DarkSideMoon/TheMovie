@@ -12,8 +12,8 @@ namespace TheMovie.Model.Interfaces
     /// </summary>
     public interface IRandom
     {
-        IEnumerable<Movie> Search(SearchViewModel searchViewModel);
+        IEnumerable<Movie> Random(SearchViewModel searchViewModel);
 
-        Task<IEnumerable<Movie>> SearchAsync(SearchViewModel searchViewModel);
+        Task<IEnumerable<Movie>> RandomAsync(SearchViewModel searchViewModel);
     }
 }
