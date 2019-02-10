@@ -45,7 +45,10 @@ namespace TheMovie.Model.Base
         }
 
         [JsonProperty("genre_ids")]
-        public List<int> Genres { get; set; }
+        public List<int> GenreIds { get; set; }
+
+        [JsonProperty("genres")]
+        public List<Genre> Genres { get; set; }
 
         [JsonProperty("overview")]
         public string Overview { get; set; }
@@ -55,5 +58,10 @@ namespace TheMovie.Model.Base
 
         [JsonProperty("release_date")]
         public DateTime? ReleaseDateTime { get; set; }
+
+        public ShortMovie()
+        {
+            Genres = new List<Genre>();
+        }
     }
 }

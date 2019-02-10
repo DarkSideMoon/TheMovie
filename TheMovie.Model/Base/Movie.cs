@@ -87,12 +87,15 @@ namespace TheMovie.Model.Base
         public string State { get; set; }
 
         [JsonProperty("genres")]
-        public List<Genre> Genres { get; set; }
+        public IEnumerable<Genre> Genres { get; set; }
 
         [JsonProperty("production_companies")]
-        public List<ProductionCompany> ProductionCompanies { get; set; }
+        public IEnumerable<ProductionCompany> ProductionCompanies { get; set; }
 
         [JsonProperty("production_countries")]
-        public List<ProductionCountry> ProductionCountries { get; set; }
+        public IEnumerable<ProductionCountry> ProductionCountries { get; set; }
+
+        [JsonProperty("videos")]
+        public IEnumerable<Video> Videos { get; set; }
     }
 }

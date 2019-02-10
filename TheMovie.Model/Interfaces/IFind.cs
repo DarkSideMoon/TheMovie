@@ -30,5 +30,9 @@ namespace TheMovie.Model.Interfaces
         IEnumerable<ShortMovie> GetBestMoviesByYear(int genre, int year, string language);
 
         Task<IEnumerable<ShortMovie>> GetBestMoviesByYearAsync(int genre, int year, string language);
+
+        IEnumerable<Video> GetVideos(int movieId, string language);
+
+        Task<IEnumerable<Video>> GetVideosAsync(int movieId, string language);
     }
 }

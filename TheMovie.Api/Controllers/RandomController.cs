@@ -56,7 +56,7 @@ namespace TheMovie.Api.Controllers
             var shortFindedMovie = movies.ElementAtOrDefault(randomMovie);
 
             // Get full information of movie
-            var movie = _client.GetMovie(shortFindedMovie.Id, language);
+            var movie = await _client.GetMovieAsync(shortFindedMovie.Id, language);
 
             return Ok(movie);
         }

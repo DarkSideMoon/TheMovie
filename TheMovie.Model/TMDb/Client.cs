@@ -42,7 +42,10 @@ namespace TheMovie.Model.TMDb
             try
             {
                 IRestResponse<Movie> response = await _restClient.ExecuteTaskAsync<Movie>(request);
-                return JsonConvert.DeserializeObject<Movie>(response.Content);
+                var movie = JsonConvert.DeserializeObject<Movie>(response.Content);
+                movie.Videos = await GetVideosAsync(id, language);
+
+                return movie;
             }
             catch (Exception ex)
             {
@@ -127,6 +130,32 @@ namespace TheMovie.Model.TMDb
             return await ExecuteQuery(query);
         }
 
+        public IEnumerable<Video> GetVideos(int movieId, string language) => GetVideosAsync(movieId, language).Result;
+
+        public async Task<IEnumerable<Video>> GetVideosAsync(int movieId, string language)
+        {
+            string query = new UrlBuilder($"movie/{movieId}/videos")
+                .SetQueryParams(new
+                {
+                    api_key = _movieSettings.ApiKey,
+                    language = language,
+                })
+                .Build();
+
+            RestRequest request = new RestRequest(query, Method.GET);
+
+            try
+            {
+                IRestResponse<IEnumerable<Video>> response = await _restClient.ExecuteTaskAsync<IEnumerable<Video>>(request);
+                var jsonGenres = JObject.Parse(response.Content);
+                return JsonConvert.DeserializeObject<IEnumerable<Video>>(jsonGenres["results"].ToString());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
         #region Implementation IMovieConfiguration interface
@@ -193,7 +222,21 @@ namespace TheMovie.Model.TMDb
             {
                 IRestResponse<IEnumerable<ShortMovie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<ShortMovie>>(request);
                 var jsonMovies = JObject.Parse(response.Content);
-                return JsonConvert.DeserializeObject<IEnumerable<ShortMovie>>(jsonMovies["results"].ToString());
+                var movies = JsonConvert.DeserializeObject<IEnumerable<ShortMovie>>(jsonMovies["results"].ToString()).ToList();
+
+                // TODO: Think about performance 
+                //var genres = GetGenres(LanguageType.English).ToList();
+
+                //foreach (var movie in movies)
+                //{
+                //    foreach (var genreId in movie.GenreIds)
+                //    {
+                //        var fullGenre = genres.FirstOrDefault(x => x.Id == genreId);
+                //        movie.Genres.Add(fullGenre);
+                //    }
+                //}
+
+                return movies;
             }
             catch (Exception ex)
             {
