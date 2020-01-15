@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TheMovie.Model.Infrastructure
+﻿namespace TheMovie.Model.Infrastructure
 {
     public class MovieSettings
     {

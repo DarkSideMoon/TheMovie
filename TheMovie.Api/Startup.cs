@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
-using TheMovie.Api.Extensions;
+using TheMovie.Api.Infrastructure;
 using TheMovie.Model.Infrastructure;
 
 namespace TheMovie.Api
 {
     public class Startup
     {
+        private const string MovieSettings = "MovieSettings";
+        private const string HealthEndpoint = "/healthz";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,7 +18,6 @@ namespace TheMovie.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -36,54 +25,23 @@ namespace TheMovie.Api
             // Registers health checks services
             services.AddHealthChecks(); 
 
-            services.Configure<MovieSettings>(options => Configuration.GetSection("MovieSettings").Bind(options));
+            services.Configure<MovieSettings>(options => Configuration.GetSection(MovieSettings).Bind(options));
 
             // Add own services
-            services.AddMovieClientService(Configuration);
+            services.AddMovieClientService();
 
             // Configure swagger
-            ConfigureSwaggerService(services);
+            services.AddSwaggerService();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
             app.UseHttpsRedirection();
 
-            app.UseHealthChecks("/healthz");
+            app.UseHealthChecks(HealthEndpoint);
 
             // Configure swagger
-            ConfigureSwaggerApplication(app);
-        }
-
-        /// <summary>
-        /// Method to configure swagger applicationbuilder
-        /// </summary>
-        /// <param name="app"></param>
-        public void ConfigureSwaggerApplication(IApplicationBuilder app)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Movie Service API V1");
-            });
-        }
-
-        /// <summary>
-        /// Method to configure swagger service
-        /// </summary>
-        /// <param name="services"></param>
-        public void ConfigureSwaggerService(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Movie Service API", Version = "v1" });
-
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            app.AddSwagger();
         }
     }
 }

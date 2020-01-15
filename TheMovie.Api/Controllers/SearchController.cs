@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Mvc;
-using TheMovie.Api.Filters;
 using TheMovie.Model.Base;
+using TheMovie.Model.Common;
 using TheMovie.Model.Interfaces;
 using TheMovie.Model.ViewModel;
 
@@ -15,9 +12,10 @@ namespace TheMovie.Api.Controllers
     /// <summary>
     /// Search controller
     /// </summary>
-    [Produces("application/json")]
-    [Route("api/[controller]")]
-    public class SearchController : Controller
+    [ApiController]
+    [Route("search")]
+    [Produces(MediaTypeNames.Application.Json)]
+    public class SearchController : ControllerBase
     {
         /// <summary>
         /// Client for movie service
@@ -27,21 +25,22 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Search constructor
         /// </summary>
-        /// <param name="serviceProvider"></param>
-        public SearchController(IServiceProvider serviceProvider)
+        /// <param name="client"></param>
+        public SearchController(IClient client)
         {
-            _client = serviceProvider.GetService<IClient>();
+            _client = client;
         }
 
         /// <summary>
         /// Search movies
         /// </summary>
         /// <param name="searchViewModel"></param>
-        /// <returns></returns>
+        /// <returns>Return find movies</returns>
+        /// <response code="200">Return find movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpPost]
-        [Route("search")]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> Search([FromBody] SearchViewModel searchViewModel)
         {
             var movies = await _client.SearchAsync(searchViewModel);

@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using TheMovie.Api.Filters;
 using TheMovie.Model.Base;
-using TheMovie.Model.Infrastructure;
+using TheMovie.Model.Common;
 using TheMovie.Model.Interfaces;
 
 namespace TheMovie.Api.Controllers
@@ -15,15 +11,11 @@ namespace TheMovie.Api.Controllers
     /// <summary>
     /// Movie controller
     /// </summary>
-    [Produces("application/json")]
-    [Route("api/[controller]")]
-    public class MovieController : Controller
+    [ApiController]
+    [Route("movie")]
+    [Produces(MediaTypeNames.Application.Json)]
+    public class MovieController : ControllerBase
     {
-        /// <summary>
-        /// MovieSettings for movie service
-        /// </summary>
-        private readonly MovieSettings _movieSettings;
-
         /// <summary>
         /// Client for movie service
         /// </summary>
@@ -32,23 +24,22 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Movie constructor
         /// </summary>
-        /// <param name="configurationOption">MovieSettings of service</param>
-        /// <param name="serviceProvider">Service provider for DI</param>
-        public MovieController(IOptions<MovieSettings> configurationOption, IServiceProvider serviceProvider)
+        /// <param name="client">Client</param>
+        public MovieController(IClient client)
         {
-            _movieSettings = configurationOption.Value;
-
-            _client = serviceProvider.GetService<IClient>();
+            _client = client;
         }
 
         /// <summary>
         /// Get Movie by id
         /// </summary>
         /// <param name="id">Id of movie</param>
-        /// <returns></returns>
+        /// <returns>Return movie by id</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(Movie), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> Get(int id)
         {
             var movie = await _client.GetMovieAsync(id, LanguageType.English);
@@ -60,11 +51,13 @@ namespace TheMovie.Api.Controllers
         /// </summary>
         /// <param name="id">Id of movie</param>
         /// <param name="language">Language of client</param>
-        /// <returns></returns>
+        /// <returns>Return movie by language</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet]
         [Route("getByLanguage")]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(Movie), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> Get(int id, string language)
         {
             var movie = await _client.GetMovieAsync(id, language);
@@ -76,11 +69,13 @@ namespace TheMovie.Api.Controllers
         /// </summary>
         /// <param name="genre">Genre</param>
         /// <param name="language">Language of client</param>
-        /// <returns></returns>
+        /// <returns>Return popular movie</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet]
         [Route("getPopularMoviesByGenre")]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetPopularMoviesByGenre(int genre, string language)
         {
             var movies = await _client.GetPopularMoviesByGenreAsync(genre, language);
@@ -93,11 +88,13 @@ namespace TheMovie.Api.Controllers
         /// <param name="genre">Genre</param>
         /// <param name="year">Year of release movie</param>
         /// <param name="language">Language of client</param>
-        /// <returns></returns>
+        /// <returns>Return popular movie</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet]
         [Route("getPopularMoviesByGenreWithYear")]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetPopularMoviesByGenreWithYear(int genre, int year, string language)
         {
             var movies = await _client.GetPopularMoviesByGenreWithYearAsync(genre, year, language);
@@ -110,11 +107,13 @@ namespace TheMovie.Api.Controllers
         /// <param name="genre"></param>
         /// <param name="year"></param>
         /// <param name="language"></param>
-        /// <returns></returns>
+        /// <returns>Return best movie</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
         [HttpGet]
         [Route("getBestMoviesByYear")]
-        [CustomExceptionFilter]
         [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetBestMoviesByYearAsync(int genre, int year, string language)
         {
             var movies = await _client.GetBestMoviesByYearAsync(genre, year, language);
