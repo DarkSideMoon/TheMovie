@@ -19,6 +19,7 @@ namespace TheMovie.Api.Extensions
         /// Add movie client service through DI
         /// </summary>
         /// <param name="services"></param>
+        /// <param name="Configuration"></param>
         public static void AddMovieClientService(this IServiceCollection services, IConfiguration Configuration)
         {
             // Get configuration form json file
