@@ -12,9 +12,9 @@ namespace TheMovie.Api.Controllers
     /// Configurations data for application
     /// </summary>
     [ApiController]
-    [Route("configuration")]
+    [Route("settings")]
     [Produces(MediaTypeNames.Application.Json)]
-    public class ConfigurationController : ControllerBase
+    public class SettingsController : ControllerBase
     {
         /// <summary>
         /// Client for movie service
@@ -25,7 +25,7 @@ namespace TheMovie.Api.Controllers
         /// The constructor of configurations
         /// </summary>
         /// <param name="client"></param>
-        public ConfigurationController(IClient client)
+        public SettingsController(IClient client)
         {
             _client = client;
         }

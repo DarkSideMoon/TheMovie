@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TheMovie.Model\TheMovie.Model.csproj" />
+    <ProjectReference Include="..\TheMovie.Service\TheMovie.Service.csproj" />
   </ItemGroup>
 
 </Project>

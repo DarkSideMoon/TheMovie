@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using TheMovie.Model.Base;
 using TheMovie.Model.Builder;
-using TheMovie.Model.Infrastructure;
+using TheMovie.Model.Settings;
 using TheMovie.Model.Interfaces;
 using TheMovie.Model.ViewModel;
 

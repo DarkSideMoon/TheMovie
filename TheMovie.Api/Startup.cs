@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TheMovie.Api.Infrastructure;
-using TheMovie.Model.Infrastructure;
+using TheMovie.Model.Settings;
 
 namespace TheMovie.Api
 {

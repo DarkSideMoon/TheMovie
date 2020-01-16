@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovie.Model", "TheMovie.Model\TheMovie.Model.csproj", "{6631CAFF-9EE7-4A64-8B98-35AECD04840F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheMovie.Api", "TheMovie.Api\TheMovie.Api.csproj", "{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovie.Api", "TheMovie.Api\TheMovie.Api.csproj", "{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheMovie.Service", "TheMovie.Service\TheMovie.Service.csproj", "{ABC1D23F-68A8-4376-B7E7-E4096192581B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

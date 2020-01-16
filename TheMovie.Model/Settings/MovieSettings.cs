@@ -1,4 +1,4 @@
-﻿namespace TheMovie.Model.Infrastructure
+﻿namespace TheMovie.Model.Settings
 {
     public class MovieSettings
     {
