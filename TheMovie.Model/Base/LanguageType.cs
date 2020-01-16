@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TheMovie.Model.Base
+﻿namespace TheMovie.Model.Base
 {
     public class LanguageType
     {
@@ -19,6 +15,5 @@ namespace TheMovie.Model.Base
         public static string French => "fr-FR";
 
         public static string Spanish => "es-ES";
-
     }
 }

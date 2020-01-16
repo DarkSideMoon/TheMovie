@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
 using TheMovie.Model.Interfaces;

@@ -25,18 +25,28 @@ namespace TheMovie.Api
             // Registers health checks services
             services.AddHealthChecks(); 
 
-            services.Configure<MovieSettings>(options => Configuration.GetSection(MovieSettings).Bind(options));
+            services.AddSingleton(options => Configuration.GetSection(MovieSettings).Get<MovieSettings>());
 
             // Add own services
             services.AddMovieClientService();
 
             // Configure swagger
             services.AddSwaggerService();
+
+            // Configure automapper
+            services.AddAutomapperService();
         }
 
         public void Configure(IApplicationBuilder app)
         {
             app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.UseHealthChecks(HealthEndpoint);
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TheMovie.Api.Request;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
 using TheMovie.Model.Interfaces;
@@ -34,16 +35,14 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Get best movie by the year
         /// </summary>
-        /// <param name="genre"></param>
-        /// <param name="year"></param>
-        /// <param name="language"></param>
+        /// <param name="getRandomMovieRequest"></param>
         /// <returns>Return random movie</returns>
         /// <response code="200">Return random movie</response>
         /// <response code="500">Internal server error</response>
         [HttpGet]
         [ProducesResponseType(typeof(Movie), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public async Task<IActionResult> GetBestMoviesByYearAsync(int genre, int year, string language)
+        public async Task<IActionResult> GetRandomMovieAsync([FromQuery] GetRandomMovieRequest getRandomMovieRequest)
         {
             // From 1 to 4 pages of movies
             int randomPage = new Random().Next(1, 4);
@@ -52,13 +51,17 @@ namespace TheMovie.Api.Controllers
             int randomMovie = new Random().Next(1, 20);
 
             // Get short information about movies
-            var movies = await _client.GetPopularMoviesByGenreWithYearPageAsync(genre, year, randomPage, language);
+            var movies = 
+                await _client.GetPopularMoviesByGenreWithYearPageAsync(
+                    getRandomMovieRequest.Genre, 
+                    getRandomMovieRequest.Year, randomPage, 
+                    getRandomMovieRequest.Language);
 
             // Get random movie 
             var shortFindedMovie = movies.ElementAtOrDefault(randomMovie);
 
             // Get full information of movie
-            var movie = await _client.GetMovieAsync(shortFindedMovie.Id, language);
+            var movie = await _client.GetMovieAsync(shortFindedMovie.Id, getRandomMovieRequest.Language);
 
             return Ok(movie);
         }
