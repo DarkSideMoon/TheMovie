@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovie.Model", "TheMovie.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovie.Api", "TheMovie.Api\TheMovie.Api.csproj", "{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheMovie.Service", "TheMovie.Service\TheMovie.Service.csproj", "{ABC1D23F-68A8-4376-B7E7-E4096192581B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMovie.Service", "TheMovie.Service\TheMovie.Service.csproj", "{ABC1D23F-68A8-4376-B7E7-E4096192581B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheMovie.Integration.Tests", "TheMovie.Integration.Tests\TheMovie.Integration.Tests.csproj", "{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{57EE0761-E110-4424-882A-D8A945493EE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD590D51-6F52-4970-BE25-D5DE6C6B8BDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +33,19 @@ Global
 		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABC1D23F-68A8-4376-B7E7-E4096192581B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6631CAFF-9EE7-4A64-8B98-35AECD04840F} = {DD590D51-6F52-4970-BE25-D5DE6C6B8BDE}
+		{7B830071-BC53-4EFA-BDBB-1B7DA4DDE611} = {DD590D51-6F52-4970-BE25-D5DE6C6B8BDE}
+		{ABC1D23F-68A8-4376-B7E7-E4096192581B} = {DD590D51-6F52-4970-BE25-D5DE6C6B8BDE}
+		{0B2BF6CB-97BF-498F-A887-97F5D9F9E2F2} = {57EE0761-E110-4424-882A-D8A945493EE5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3BB8C4E2-47D0-45F8-90B7-A8DA92935D38}
