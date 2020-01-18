@@ -10,14 +10,14 @@ namespace TheMovie.Service.Service.Auth
         /// Create async token to get permission of application
         /// </summary>
         /// <returns></returns>
-        Task<string> CreateTokenAsync();
+        Task<Token> CreateTokenAsync();
 
         /// <summary>
         /// Delete async user session
         /// </summary>
         /// <param name="requestToken">Token</param>
         /// <returns></returns>
-        Task<bool> DeleteUserSessionAsync(AuthViewModel authViewModel);
+        Task<bool> DeleteUserSessionAsync(SessionViewModel sessionViewModel);
 
         /// <summary>
         /// Check async is success of getting permission

@@ -35,6 +35,9 @@ namespace TheMovie.Api
 
             // Configure automapper
             services.AddAutomapperService();
+
+            // Add http client service
+            services.AddHttpClientService();
         }
 
         public void Configure(IApplicationBuilder app)
