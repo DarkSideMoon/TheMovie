@@ -8,8 +8,4 @@
     <ProjectReference Include="..\TheMovie.Model\TheMovie.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
-
 </Project>

@@ -8,7 +8,14 @@ namespace TheMovie.Api.Mapping
     {
         public RequestProfile()
         {
+            CreateMap<MovieRequest, Service.ViewModel.MovieViewModel>();
+
             CreateMap<SearchRequest, SearchViewModel>();
+
+            CreateMap<GetGenresRequest, Service.ViewModel.GenreViewModel>();
+
+            CreateMap<GetRandomMovieRequest, Service.ViewModel.RandomMovieViewModel>()
+                .IncludeBase<MovieRequest, Service.ViewModel.MovieViewModel>();
         }
     }
 }

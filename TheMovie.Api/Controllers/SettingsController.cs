@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using TheMovie.Api.Request;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
-using TheMovie.Model.Interfaces;
+using TheMovie.Service.Service.Settings;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Api.Controllers
 {
@@ -16,18 +19,19 @@ namespace TheMovie.Api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     public class SettingsController : ControllerBase
     {
-        /// <summary>
-        /// Client for movie service
-        /// </summary>
-        private readonly IClient _client;
+        private readonly ISettingsService _settingsService;
+
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// The constructor of configurations
         /// </summary>
-        /// <param name="client"></param>
-        public SettingsController(IClient client)
+        /// <param name="settingsService"></param>
+        /// <param name="mapper"></param>
+        public SettingsController(ISettingsService settingsService, IMapper mapper)
         {
-            _client = client;
+            _settingsService = settingsService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -38,18 +42,9 @@ namespace TheMovie.Api.Controllers
         [HttpGet]
         [Route("languages")]
         [ProducesResponseType(typeof(List<Language>), 200)]
-        public IActionResult GetLanguages()
+        public async Task<IActionResult> GetLanguages()
         {
-            var languages = new List<Language>()
-            {
-                new Language("English", LanguageType.English, string.Empty),
-                new Language("Ukrainian", LanguageType.Ukrainian, string.Empty),
-                new Language("Italian", LanguageType.Italian, string.Empty),
-                new Language("French", LanguageType.French, string.Empty),
-                new Language("German", LanguageType.German, string.Empty),
-                new Language("Spanish", LanguageType.Spanish, string.Empty),
-                new Language("Russian", LanguageType.Russian, string.Empty)
-            };
+            var languages = await _settingsService.GetLanguagesAsync();
 
             return Ok(languages);
         }
@@ -64,9 +59,11 @@ namespace TheMovie.Api.Controllers
         [Route("genres")]
         [ProducesResponseType(typeof(List<Genre>), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public async Task<IActionResult> GetGenres()
+        public async Task<IActionResult> GetGenres(GetGenresRequest getGenresRequest)
         {
-            var genres = await _client.GetGenresAsync(LanguageType.English);
+            var genreViewModel = _mapper.Map<GenreViewModel>(getGenresRequest);
+
+            var genres = await _settingsService.GetGenresAsync(genreViewModel);
             return Ok(genres);
         }
     }

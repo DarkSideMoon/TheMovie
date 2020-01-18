@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using TheMovie.Model.Base;
 using TheMovie.Service.ViewModel;
 
-namespace TheMovie.Service.Interfaces
+namespace TheMovie.Service.Service.Settings
 {
-    public interface IMovieSettings
+    public interface ISettingsService
     {
         Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel);
 

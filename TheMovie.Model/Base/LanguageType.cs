@@ -1,6 +1,6 @@
 ﻿namespace TheMovie.Model.Base
 {
-    public class LanguageType
+    public static class LanguageType
     {
         public static string English => "en-US";
 

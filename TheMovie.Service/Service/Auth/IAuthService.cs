@@ -2,9 +2,9 @@
 using TheMovie.Model.Security;
 using TheMovie.Service.ViewModel;
 
-namespace TheMovie.Service.Interfaces
+namespace TheMovie.Service.Service.Auth
 {
-    public interface IAuth
+    public interface IAuthService
     {
         /// <summary>
         /// Create async token to get permission of application
