@@ -10,7 +10,6 @@ using TheMovie.Model.Base;
 using TheMovie.Model.Builder;
 using TheMovie.Model.Settings;
 using TheMovie.Model.Interfaces;
-using TheMovie.Model.ViewModel;
 
 namespace TheMovie.Model.TMDb
 {
@@ -191,24 +190,22 @@ namespace TheMovie.Model.TMDb
 
         #region Implementation ISearch interface
 
-        public IEnumerable<ShortMovie> Search(SearchViewModel searchViewModel) => SearchAsync(searchViewModel).Result;
+        //public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
+        //{
+        //    string query = new UrlBuilder("search/movie")
+        //        .SetQueryParams(new
+        //        {
+        //            api_key = _movieSettings.ApiKey,
+        //            language = searchViewModel.Language,
+        //            query = searchViewModel.QueryName,
+        //            include_adult = searchViewModel.IsAdult,
+        //            region = searchViewModel.Region,
+        //            year = searchViewModel.Year
+        //        })
+        //        .Build();
 
-        public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
-        {
-            string query = new UrlBuilder("search/movie")
-                .SetQueryParams(new
-                {
-                    api_key = _movieSettings.ApiKey,
-                    language = searchViewModel.Language,
-                    query = searchViewModel.QueryName,
-                    include_adult = searchViewModel.IsAdult,
-                    region = searchViewModel.Region,
-                    year = searchViewModel.Year
-                })
-                .Build();
-
-            return await ExecuteQuery(query);
-        }
+        //    return await ExecuteQuery(query);
+        //}
 
         #endregion
 

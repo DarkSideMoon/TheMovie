@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TheMovie.Api.Request;
-using TheMovie.Model.ViewModel;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Api.Mapping
 {
@@ -8,14 +8,14 @@ namespace TheMovie.Api.Mapping
     {
         public RequestProfile()
         {
-            CreateMap<MovieRequest, Service.ViewModel.MovieViewModel>();
+            CreateMap<MovieRequest, MovieViewModel>();
 
             CreateMap<SearchRequest, SearchViewModel>();
 
-            CreateMap<GetGenresRequest, Service.ViewModel.GenreViewModel>();
+            CreateMap<GetGenresRequest, GenreViewModel>();
 
-            CreateMap<GetRandomMovieRequest, Service.ViewModel.RandomMovieViewModel>()
-                .IncludeBase<MovieRequest, Service.ViewModel.MovieViewModel>();
+            CreateMap<GetRandomMovieRequest, RandomMovieViewModel>()
+                .IncludeBase<MovieRequest, MovieViewModel>();
         }
     }
 }

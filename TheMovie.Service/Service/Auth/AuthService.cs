@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TheMovie.Model.Security;
 using TheMovie.Model.Settings;
-using TheMovie.Service.Exceptions;
+using TheMovie.Model.Exceptions;
 using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Service.Service.Auth

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TheMovie.Model.Base;
 using TheMovie.Service.ViewModel;
 
@@ -10,6 +9,6 @@ namespace TheMovie.Service.Service.Random
     /// </summary>
     public interface IRandomService
     {
-        Task<IEnumerable<Movie>> GetRandomMovieAsync(RandomMovieViewModel randomMovieViewModel);
+        Task<Movie> GetRandomMovieAsync(RandomMovieViewModel randomMovieViewModel);
     }
 }

@@ -1,16 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheMovie.Model.Base;
+using TheMovie.Service.Service.Client;
 using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Service.Service.Settings
 {
     public class SettingsService : ISettingsService
     {
-        public Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel)
+        private readonly IMovieClient _movieClient;
+
+        public SettingsService(IMovieClient movieClient)
         {
-            throw new NotImplementedException();
+            _movieClient = movieClient;
+        }
+
+        public async Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel)
+        {
+            return await _movieClient.GetGenresAsync(genreViewModel);
         }
 
         public async Task<IEnumerable<Language>> GetLanguagesAsync()

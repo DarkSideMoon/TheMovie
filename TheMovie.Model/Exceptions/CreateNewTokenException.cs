@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TheMovie.Service.Exceptions
+namespace TheMovie.Model.Exceptions
 {
     [Serializable]
     public class CreateNewTokenException : Exception

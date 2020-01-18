@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheMovie.Model.Base;
-using TheMovie.Model.ViewModel;
 
 namespace TheMovie.Model.Interfaces
 {
@@ -10,8 +9,8 @@ namespace TheMovie.Model.Interfaces
     /// </summary>
     public interface IRandom
     {
-        IEnumerable<Movie> Random(SearchViewModel searchViewModel);
+        //IEnumerable<Movie> Random(SearchViewModel searchViewModel);
 
-        Task<IEnumerable<Movie>> RandomAsync(SearchViewModel searchViewModel);
+        //Task<IEnumerable<Movie>> RandomAsync(SearchViewModel searchViewModel);
     }
 }

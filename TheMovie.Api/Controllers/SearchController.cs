@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using TheMovie.Api.Request;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
-using TheMovie.Model.Interfaces;
-using TheMovie.Model.ViewModel;
+using TheMovie.Service.Service.Search;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Api.Controllers
 {
@@ -19,24 +19,18 @@ namespace TheMovie.Api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     public class SearchController : ControllerBase
     {
-        /// <summary>
-        /// Client for movie service
-        /// </summary>
-        private readonly IClient _client;
+        private readonly ISearchService _searchService;
 
-        /// <summary>
-        /// Mapper to map data
-        /// </summary>
         private readonly IMapper _mapper;
 
         /// <summary>
         /// Search constructor
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="searchService"></param>
         /// <param name="mapper"></param>
-        public SearchController(IClient client, IMapper mapper)
+        public SearchController(ISearchService searchService, IMapper mapper)
         {
-            _client = client;
+            _searchService = searchService;
             _mapper = mapper;
         }
 
@@ -54,7 +48,7 @@ namespace TheMovie.Api.Controllers
         {
             var searchViewModel = _mapper.Map<SearchViewModel>(searchRequest);
 
-            var movies = await _client.SearchAsync(searchViewModel);
+            var movies = await _searchService.SearchAsync(searchViewModel);
             return Ok(movies);
         }
     }

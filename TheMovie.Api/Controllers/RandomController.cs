@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Net.Mime;
+﻿using System.Net.Mime;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TheMovie.Api.Request;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
-using TheMovie.Model.Interfaces;
+using TheMovie.Service.Service.Random;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Api.Controllers
 {
@@ -18,18 +18,19 @@ namespace TheMovie.Api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     public class RandomController : ControllerBase
     {
-        /// <summary>
-        /// Client for movie service
-        /// </summary>
-        private readonly IClient _client;
+        private readonly IRandomService _randomService;
+
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// The constructor of configurations
         /// </summary>
-        /// <param name="client"></param>
-        public RandomController(IClient client)
+        /// <param name="randomService"></param>
+        /// <param name="mapper"></param>
+        public RandomController(IRandomService randomService, IMapper mapper)
         {
-            _client = client;
+            _randomService = randomService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -44,25 +45,9 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetRandomMovieAsync([FromQuery] GetRandomMovieRequest getRandomMovieRequest)
         {
-            // From 1 to 4 pages of movies
-            int randomPage = new Random().Next(1, 4);
+            var randomViewModel = _mapper.Map<RandomMovieViewModel>(getRandomMovieRequest);
 
-            // Random movie per one page
-            int randomMovie = new Random().Next(1, 20);
-
-            // Get short information about movies
-            var movies = 
-                await _client.GetPopularMoviesByGenreWithYearPageAsync(
-                    getRandomMovieRequest.Genre, 
-                    getRandomMovieRequest.Year, randomPage, 
-                    getRandomMovieRequest.Language);
-
-            // Get random movie 
-            var shortFindedMovie = movies.ElementAtOrDefault(randomMovie);
-
-            // Get full information of movie
-            var movie = await _client.GetMovieAsync(shortFindedMovie.Id, getRandomMovieRequest.Language);
-
+            var movie = await _randomService.GetRandomMovieAsync(randomViewModel);
             return Ok(movie);
         }
     }

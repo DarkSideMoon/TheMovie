@@ -1,16 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheMovie.Model.Base;
-using TheMovie.Model.ViewModel;
+using TheMovie.Service.Service.Client;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Service.Service.Search
 {
     public class SearchService : ISearchService
     {
-        public Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
+        private readonly IMovieClient _movieClient;
+
+        public SearchService(IMovieClient movieClient)
         {
-            throw new NotImplementedException();
+            _movieClient = movieClient;
+        }
+
+        public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
+        {
+            return await _movieClient.SearchAsync(searchViewModel);
         }
     }
 }
