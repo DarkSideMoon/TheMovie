@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TheMovie.Model.Util;
+using TheMovie.Model.Common;
 
 namespace TheMovie.Service.Builder
 {
@@ -15,63 +15,21 @@ namespace TheMovie.Service.Builder
         /// </summary>
         private Dictionary<string, string> _queryParams = new Dictionary<string, string>();
 
-        public UrlBuilder()
-        {
-            _urlBuilder = new StringBuilder();
-        }
-
         public UrlBuilder(string baseUrl)
         {
             _urlBuilder = new StringBuilder();
             _urlBuilder.Append(baseUrl);
         }
 
-        /// <summary>
-        /// Add endpoint of api
-        /// </summary>
-        /// <param name="path"></param>
-        public UrlBuilder AddPath(string path)
+        public UrlBuilder SetApiKey(string apiKey)
         {
-            _urlBuilder.Append(path);
+            _queryParams.Add(Constants.Movie.ApiKey, apiKey);
             return this;
         }
 
-        /// <summary>
-        /// Add several endpoints of api
-        /// </summary>
-        /// <param name="pathes"></param>
-        public UrlBuilder AddPath(IEnumerable<string> pathes)
+        public UrlBuilder SetLanguage(string language)
         {
-            _urlBuilder.Append(string.Join("/", pathes));
-            return this;
-        }
-
-        public UrlBuilder SetQueryId(string value)
-        {
-            _urlBuilder.Append("/" + value);
-            return this;
-        }
-
-        /// <summary>
-        /// Set one param
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public UrlBuilder SetQueryParam(string name, string value)
-        {
-            _queryParams.Add(name, value);
-            return this;
-        }
-
-        /// <summary>
-        /// Set parameters query api
-        /// </summary>
-        /// <param name="values"></param>
-        public UrlBuilder SetQueryParams(Dictionary<string, string> values)
-        {
-            foreach (var kv in values)
-                _queryParams.Add(kv.Key, kv.Value);
-
+            _queryParams.Add(Constants.Movie.Language, language);
             return this;
         }
 
@@ -94,21 +52,18 @@ namespace TheMovie.Service.Builder
         /// <returns></returns>
         public string Build()
         {
-            if (_queryParams.Any())
+            _urlBuilder.Append("?");
+            foreach (var queryParam in _queryParams)
             {
-                _urlBuilder.Append("?");
-                foreach (var queryParam in _queryParams)
-                {
-                    string query = $"{queryParam.Key}={queryParam.Value}";
+                string query = $"{queryParam.Key}={queryParam.Value}";
 
-                    if (_queryParams.LastOrDefault().Key != queryParam.Key)
-                        query += "&";
+                if (_queryParams.LastOrDefault().Key != queryParam.Key)
+                    query += "&";
 
-                    _urlBuilder.Append(query);
-                }
+                _urlBuilder.Append(query);
             }
 
             return _urlBuilder.Replace(" ", "").ToString();
-        } 
+        }
     }
 }

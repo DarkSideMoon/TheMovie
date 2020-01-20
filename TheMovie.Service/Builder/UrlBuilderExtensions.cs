@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TheMovie.Service.Util
+namespace TheMovie.Service.Builder
 {
-    public static class CommonExtensions
+    public static class UrlBuilderExtensions
     {
         public static IEnumerable<KeyValuePair<string, object>> ToKeyValuePairs(this object obj)
         {

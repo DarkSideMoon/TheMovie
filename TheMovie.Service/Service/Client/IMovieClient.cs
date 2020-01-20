@@ -9,11 +9,11 @@ namespace TheMovie.Service.Service.Client
     {
         Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel);
 
-        Task<IEnumerable<ShortMovie>> DiscoverMoviesAsync(MovieViewModel movieViewModel);
+        Task<IEnumerable<ShortMovie>> DiscoverMoviesAsync(DiscoverViewModel discoverViewModel);
 
         Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel);
 
-        Task<IEnumerable<Video>> GetVideosAsync(BaseMovieViewModel movieViewModel);
+        Task<IEnumerable<Video>> GetMovieVideosAsync(BaseMovieViewModel movieViewModel);
 
         Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel);
     }
