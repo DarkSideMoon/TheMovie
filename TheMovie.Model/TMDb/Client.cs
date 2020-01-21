@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TheMovie.Model.Base;
 using TheMovie.Model.Builder;
-using TheMovie.Model.Settings;
 using TheMovie.Model.Interfaces;
+using TheMovie.Model.Settings;
 
 namespace TheMovie.Model.TMDb
 {
     /// <summary>
     /// Implementation interface of IClient for https://themoviedb.org service
     /// </summary>
-    public class Client : IClient
+    public class Client : IFind
     {
         private readonly MovieSettings _movieSettings;
 
@@ -188,27 +187,6 @@ namespace TheMovie.Model.TMDb
 
         #endregion
 
-        #region Implementation ISearch interface
-
-        //public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
-        //{
-        //    string query = new UrlBuilder("search/movie")
-        //        .SetQueryParams(new
-        //        {
-        //            api_key = _movieSettings.ApiKey,
-        //            language = searchViewModel.Language,
-        //            query = searchViewModel.QueryName,
-        //            include_adult = searchViewModel.IsAdult,
-        //            region = searchViewModel.Region,
-        //            year = searchViewModel.Year
-        //        })
-        //        .Build();
-
-        //    return await ExecuteQuery(query);
-        //}
-
-        #endregion
-
         #region Helpers method
 
         private async Task<IEnumerable<ShortMovie>> ExecuteQuery(string query)
@@ -220,18 +198,6 @@ namespace TheMovie.Model.TMDb
                 IRestResponse<IEnumerable<ShortMovie>> response = await _restClient.ExecuteTaskAsync<IEnumerable<ShortMovie>>(request);
                 var jsonMovies = JObject.Parse(response.Content);
                 var movies = JsonConvert.DeserializeObject<IEnumerable<ShortMovie>>(jsonMovies["results"].ToString()).ToList();
-
-                // TODO: Think about performance 
-                //var genres = GetGenres(LanguageType.English).ToList();
-
-                //foreach (var movie in movies)
-                //{
-                //    foreach (var genreId in movie.GenreIds)
-                //    {
-                //        var fullGenre = genres.FirstOrDefault(x => x.Id == genreId);
-                //        movie.Genres.Add(fullGenre);
-                //    }
-                //}
 
                 return movies;
             }

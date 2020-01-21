@@ -7,13 +7,13 @@ namespace TheMovie.Service.Builder
 {
     public class UrlBuilder
     {
-        private StringBuilder _urlBuilder;
+        private readonly StringBuilder _urlBuilder;
 
         /// <summary>
         /// Dictionary faster than NameValueCollection 
         /// https://www.dotnetperls.com/namevaluecollection
         /// </summary>
-        private Dictionary<string, string> _queryParams = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _queryParams = new Dictionary<string, string>();
 
         public UrlBuilder(string baseUrl)
         {

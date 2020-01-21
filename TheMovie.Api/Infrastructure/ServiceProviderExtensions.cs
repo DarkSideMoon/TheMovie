@@ -22,7 +22,7 @@ namespace TheMovie.Api.Infrastructure
         /// <param name="services"></param>
         public static void AddMovieClientService(this IServiceCollection services)
         {
-            services.AddTransient<IClient, Client>();
+            services.AddTransient<IFind, Client>();
 
             services.AddTransient<IMovieClient, MovieClient>();
             services.AddTransient<ISettingsService, SettingsService>();

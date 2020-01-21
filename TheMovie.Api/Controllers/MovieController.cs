@@ -20,13 +20,13 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Client for movie service
         /// </summary>
-        private readonly IClient _client;
+        private readonly IFind _client;
 
         /// <summary>
         /// Movie constructor
         /// </summary>
         /// <param name="client">Client</param>
-        public MovieController(IClient client)
+        public MovieController(IFind client)
         {
             _client = client;
         }

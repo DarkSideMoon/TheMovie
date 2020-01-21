@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TheMovie.Model.Util;
 
 namespace TheMovie.Model.Builder
 {
@@ -83,9 +82,6 @@ namespace TheMovie.Model.Builder
         /// <returns></returns>
         public UrlBuilder SetQueryParams(object values)
         {
-            foreach (var kv in values.ToKeyValuePairs())
-                _queryParams.Add(kv.Key, kv.Value.ToString());
-
             return this;
         }
 

@@ -6,6 +6,8 @@ namespace TheMovie.Model.Base
 {
     public class Movie
     {
+        private readonly static string ImageTheMovieDb = "image.tmdb.org";
+
         [JsonProperty("id")]
         public int Id { get; set; }
 
@@ -57,8 +59,10 @@ namespace TheMovie.Model.Base
         {
             get
             {
-                if (!string.IsNullOrEmpty(_backgroundImage) && !_backgroundImage.Contains("image.tmdb.org"))
+                if (!string.IsNullOrEmpty(_backgroundImage) && !_backgroundImage.Contains(ImageTheMovieDb))
+                {
                     return "https://image.tmdb.org/t/p/w780/" + _backgroundImage;
+                }
 
                 return _backgroundImage;
             }
@@ -71,7 +75,7 @@ namespace TheMovie.Model.Base
         {
             get
             {
-                if (!string.IsNullOrEmpty(_posterImage) && !_posterImage.Contains("image.tmdb.org"))
+                if (!string.IsNullOrEmpty(_posterImage) && !_posterImage.Contains(ImageTheMovieDb))
                     return "https://image.tmdb.org/t/p/w780/" + _posterImage;
 
                 return _posterImage;

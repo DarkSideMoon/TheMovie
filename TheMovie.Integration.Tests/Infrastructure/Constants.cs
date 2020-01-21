@@ -4,7 +4,7 @@
     {
         public static class MovieService
         {
-            public const string Url = "http://localhost:5000";
+            public static readonly string Url = "http://localhost:5000";
         }
     }
 }

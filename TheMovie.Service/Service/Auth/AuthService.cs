@@ -75,7 +75,7 @@ namespace TheMovie.Service.Service.Auth
             var requestUri = CreateRequestUri(UserSessionUrl);
             var session = JsonConvert.SerializeObject(sessionViewModel);
 
-            var requestMessage = new HttpRequestMessage()
+            var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
                 RequestUri = requestUri,
