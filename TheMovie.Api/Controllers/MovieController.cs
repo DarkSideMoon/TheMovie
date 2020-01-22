@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using TheMovie.Api.Request;
 using TheMovie.Model.Base;
 using TheMovie.Model.Common;
-using TheMovie.Model.Interfaces;
+using TheMovie.Service.Service.Client;
+using TheMovie.Service.Service.Find;
+using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Api.Controllers
 {
@@ -17,18 +20,15 @@ namespace TheMovie.Api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     public class MovieController : ControllerBase
     {
-        /// <summary>
-        /// Client for movie service
-        /// </summary>
-        private readonly IFind _client;
+        private readonly IFindService _findService;
+        private readonly IMovieClient _movieClient;
+        private readonly IMapper _mapper;
 
-        /// <summary>
-        /// Movie constructor
-        /// </summary>
-        /// <param name="client">Client</param>
-        public MovieController(IFind client)
+        public MovieController(IFindService findService, IMovieClient movieClient, IMapper mapper)
         {
-            _client = client;
+            _findService = findService;
+            _movieClient = movieClient;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -43,7 +43,12 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> Get([FromQuery] BaseMovieRequest movieRequest)
         {
-            var movie = await _client.GetMovieAsync(movieRequest.Id, LanguageType.English);
+            var movie = await _movieClient.GetMovieAsync(
+                new BaseMovieViewModel
+                {
+                    Id = movieRequest.Id,
+                    Language = LanguageType.English
+                });
             return Ok(movie);
         }
 
@@ -61,7 +66,12 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> Get(int id, string language)
         {
-            var movie = await _client.GetMovieAsync(id, language);
+            var movie = await _movieClient.GetMovieAsync(
+                new BaseMovieViewModel
+                {
+                    Id = id,
+                    Language = language
+                });
             return Ok(movie);
         }
 
@@ -79,7 +89,11 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetPopularMoviesByGenre(int genre, string language)
         {
-            var movies = await _client.GetPopularMoviesByGenreAsync(genre, language);
+            var movies = await _findService.GetPopularMoviesByGenreAsync(new MovieViewModel 
+            {
+                Genre = genre,
+                Language = language
+            });
             return Ok(movies);
         }
 
@@ -96,8 +110,9 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetPopularMoviesByGenreWithYear([FromQuery] MovieRequest movieRequest)
         {
-            var movies = 
-                await _client.GetPopularMoviesByGenreWithYearAsync(movieRequest.Genre, movieRequest.Year, movieRequest.Language);
+            var movieViewModel = _mapper.Map<MovieViewModel>(movieRequest);
+
+            var movies = await _findService.GetPopularMoviesByGenreWithYearAsync(movieViewModel);
             return Ok(movies);
         }
 
@@ -114,7 +129,9 @@ namespace TheMovie.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), 500)]
         public async Task<IActionResult> GetBestMoviesByYearAsync([FromQuery] MovieRequest movieRequest)
         {
-            var movies = await _client.GetBestMoviesByYearAsync(movieRequest.Genre, movieRequest.Year, movieRequest.Language);
+            var movieViewModel = _mapper.Map<MovieViewModel>(movieRequest);
+
+            var movies = await _findService.GetBestMoviesByYearAsync(movieViewModel);
             return Ok(movies);
         }
     }

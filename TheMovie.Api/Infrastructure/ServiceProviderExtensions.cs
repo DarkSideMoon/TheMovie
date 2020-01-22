@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using TheMovie.Api.Mapping;
-using TheMovie.Model.Interfaces;
-using TheMovie.Model.TMDb;
 using TheMovie.Service.Service.Client;
 using TheMovie.Service.Service.Find;
 using TheMovie.Service.Service.Random;
@@ -22,8 +20,6 @@ namespace TheMovie.Api.Infrastructure
         /// <param name="services"></param>
         public static void AddMovieClientService(this IServiceCollection services)
         {
-            services.AddTransient<IFind, Client>();
-
             services.AddTransient<IMovieClient, MovieClient>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ISearchService, SearchService>();

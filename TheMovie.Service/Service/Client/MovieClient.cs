@@ -33,7 +33,8 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel)
         {
-            var getMovieUri = new UrlBuilder(string.Format(GetMovieUrl, movieViewModel.Id))
+            var completeUrl = _movieSettings.BaseUrl + GetMovieUrl;
+            var getMovieUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
                 .SetApiKey(_movieSettings.ApiKey)
                 .SetLanguage(movieViewModel.Language)
                 .Build();
@@ -48,7 +49,8 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<IEnumerable<ShortMovie>> DiscoverMoviesAsync(DiscoverViewModel discoverViewModel)
         {
-            var discoverMovieUri = new UrlBuilder(SearchMovieUrl)
+            var completeUrl = _movieSettings.BaseUrl + SearchMovieUrl;
+            var discoverMovieUri = new UrlBuilder(completeUrl)
                 .SetApiKey(_movieSettings.ApiKey)
                 .SetLanguage(discoverViewModel.Language)
                 .SetQueryParams(discoverViewModel.DiscoverParams)
@@ -59,7 +61,8 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel)
         {
-            var getGenresUri = new UrlBuilder(GetGenresUrl)
+            var completeUrl = _movieSettings.BaseUrl + GetGenresUrl;
+            var getGenresUri = new UrlBuilder(completeUrl)
                 .SetApiKey(_movieSettings.ApiKey)
                 .SetLanguage(genreViewModel.Language)
                 .Build();
@@ -69,7 +72,8 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<IEnumerable<Video>> GetMovieVideosAsync(BaseMovieViewModel movieViewModel)
         {
-            var getMovieVideosUri = new UrlBuilder(string.Format(GetMovieVideosUrl, movieViewModel.Id))
+            var completeUrl = _movieSettings.BaseUrl + GetMovieVideosUrl;
+            var getMovieVideosUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
                 .SetApiKey(_movieSettings.ApiKey)
                 .SetLanguage(movieViewModel.Language)
                 .Build();
@@ -79,7 +83,8 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
         {
-            var searchMovieUri = new UrlBuilder(SearchMovieUrl)
+            var completeUrl = _movieSettings.BaseUrl + SearchMovieUrl;
+            var searchMovieUri = new UrlBuilder(completeUrl)
                 .SetApiKey(_movieSettings.ApiKey)
                 .SetLanguage(searchViewModel.Language)
                 .SetQueryParams(new
