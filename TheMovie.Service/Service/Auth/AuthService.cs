@@ -90,11 +90,6 @@ namespace TheMovie.Service.Service.Auth
             return JsonConvert.DeserializeObject<UserSession>(tokenResponse).IsSuccess;
         }
 
-        public Task<bool> IsGetPermissionSuccessAsync(AuthViewModel authViewModel)
-        {
-            throw new NotImplementedException();
-        }
-
         private Uri CreateRequestUri(string url)
         {
             return new Uri(string.Format(url, _movieSettings.ApiKey));

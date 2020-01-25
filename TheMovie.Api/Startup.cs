@@ -11,9 +11,9 @@ namespace TheMovie.Api
 {
     public class Startup
     {
-        private const string MovieSettings = "MovieSettings";
-        private const string HealthEndpoint = "/healthz";
-        private const string AppStartedLog = "App {0} has been started";
+        private readonly static string MovieSettings = "MovieSettings";
+        private readonly static string HealthEndpoint = "/healthz";
+        private readonly static string AppStartedLog = "App {0} has been started";
 
         public Startup(IConfiguration configuration)
         {

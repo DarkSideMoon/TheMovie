@@ -9,6 +9,6 @@ namespace TheMovie.Service.Service.Settings
     {
         Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel);
 
-        Task<IEnumerable<Language>> GetLanguagesAsync();
+        IEnumerable<Language> GetLanguages();
     }
 }

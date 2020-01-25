@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System.IO;
-using TheMovie.Model.Common;
 
 namespace TheMovie.Api
 {

@@ -56,7 +56,7 @@ namespace TheMovie.Service.Service.Client
                 .SetQueryParams(discoverViewModel.DiscoverParams)
                 .Build();
 
-            return await ExecuteRequest<IEnumerable<ShortMovie>>(discoverMovieUri, ParsedResultsArrayName);
+            return await ExecuteRequest<IEnumerable<ShortMovie>>(discoverMovieUri, ParsedResultsArrayName).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Genre>> GetGenresAsync(GenreViewModel genreViewModel)
@@ -67,7 +67,7 @@ namespace TheMovie.Service.Service.Client
                 .SetLanguage(genreViewModel.Language)
                 .Build();
 
-            return await ExecuteRequest<IEnumerable<Genre>>(getGenresUri, GenreParsedResultsArrayName);
+            return await ExecuteRequest<IEnumerable<Genre>>(getGenresUri, GenreParsedResultsArrayName).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<Video>> GetMovieVideosAsync(BaseMovieViewModel movieViewModel)
@@ -78,7 +78,7 @@ namespace TheMovie.Service.Service.Client
                 .SetLanguage(movieViewModel.Language)
                 .Build();
 
-            return await ExecuteRequest<IEnumerable<Video>>(getMovieVideosUri, ParsedResultsArrayName);
+            return await ExecuteRequest<IEnumerable<Video>>(getMovieVideosUri, ParsedResultsArrayName).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<ShortMovie>> SearchAsync(SearchViewModel searchViewModel)
@@ -96,7 +96,7 @@ namespace TheMovie.Service.Service.Client
                 })
                 .Build();
 
-            return await ExecuteRequest<IEnumerable<ShortMovie>>(searchMovieUri, ParsedResultsArrayName);
+            return await ExecuteRequest<IEnumerable<ShortMovie>>(searchMovieUri, ParsedResultsArrayName).ConfigureAwait(false);
         }
 
         private async Task<TResult> ExecuteRequest<TResult>(string query, string parsedResultsArrayName)

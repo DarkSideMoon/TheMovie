@@ -42,10 +42,9 @@ namespace TheMovie.Api.Controllers
         [HttpGet]
         [Route("languages")]
         [ProducesResponseType(typeof(List<Language>), 200)]
-        public async Task<IActionResult> GetLanguages()
+        public IActionResult GetLanguages()
         {
-            var languages = await _settingsService.GetLanguagesAsync();
-
+            var languages = _settingsService.GetLanguages();
             return Ok(languages);
         }
 

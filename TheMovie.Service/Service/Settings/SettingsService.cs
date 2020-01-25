@@ -20,9 +20,9 @@ namespace TheMovie.Service.Service.Settings
             return await _movieClient.GetGenresAsync(genreViewModel);
         }
 
-        public async Task<IEnumerable<Language>> GetLanguagesAsync()
+        public IEnumerable<Language> GetLanguages()
         {
-            return await Task.FromResult(new List<Language>
+            return new List<Language>
             {
                 new Language(LanguageName.English, LanguageType.English, string.Empty),
                 new Language(LanguageName.Ukrainian, LanguageType.Ukrainian, string.Empty),
@@ -31,7 +31,7 @@ namespace TheMovie.Service.Service.Settings
                 new Language(LanguageName.German, LanguageType.German, string.Empty),
                 new Language(LanguageName.Spanish, LanguageType.Spanish, string.Empty),
                 new Language(LanguageName.Russian, LanguageType.Russian, string.Empty)
-            });
+            };
         }
     }
 }

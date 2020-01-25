@@ -4,14 +4,14 @@
     {
         public static class Movie
         {
-            public const string ApiKey = "api_key";
+            public readonly static string ApiKey = "api_key";
             
-            public const string Language = "language";
+            public readonly static string Language = "language";
         }
 
         public static class App
         {
-            public const string Name = "The movie";
+            public readonly static string Name = "The movie";
         }
     }
 }

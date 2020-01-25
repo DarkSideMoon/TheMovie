@@ -8,7 +8,7 @@ namespace TheMovie.Integration.Tests.Base
 {
     public class BaseTest
     {
-        protected Scenario CreateGetScenario(string nameScenatio, string uri)
+        protected static Scenario CreateGetScenario(string nameScenatio, string uri)
         {
             var step = HttpStep.Create("Request step", context => Http.CreateRequest("GET", Constants.MovieService.Url + uri));
 

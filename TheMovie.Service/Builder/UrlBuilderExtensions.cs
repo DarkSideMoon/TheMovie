@@ -7,9 +7,6 @@ namespace TheMovie.Service.Builder
     {
         public static IEnumerable<KeyValuePair<string, object>> ToKeyValuePairs(this object obj)
         {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
-
             var inputObject = obj.ToString();
             var arrayObjects = inputObject
                 .Replace("{", "")

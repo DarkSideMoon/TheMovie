@@ -20,13 +20,6 @@ namespace TheMovie.Service.Service.Auth
         Task<bool> DeleteUserSessionAsync(SessionViewModel sessionViewModel);
 
         /// <summary>
-        /// Check async is success of getting permission
-        /// </summary>
-        /// <param name="requestToken">Token</param>
-        /// <returns></returns>
-        Task<bool> IsGetPermissionSuccessAsync(AuthViewModel authViewModel);
-
-        /// <summary>
         /// Create user session async
         /// </summary>
         /// <param name="requestToken">Token</param>

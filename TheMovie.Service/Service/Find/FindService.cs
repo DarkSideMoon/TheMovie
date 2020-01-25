@@ -61,20 +61,5 @@ namespace TheMovie.Service.Service.Find
             };
             return await _movieClient.DiscoverMoviesAsync(discoverViewModel);
         }
-
-        public async Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYearPageAsync(MovieViewModel movieViewModel)
-        {
-            var discoverViewModel = new DiscoverViewModel
-            {
-                Language = movieViewModel.Language,
-                DiscoverParams = new
-                {
-                    sort_by = PopulatiryDesc,
-                    primary_release_year = movieViewModel.Year,
-                    with_genres = movieViewModel.Genre
-                }
-            };
-            return await _movieClient.DiscoverMoviesAsync(discoverViewModel);
-        }
     }
 }
