@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheMovie.Model.Base;
+using TheMovie.Model.Common;
 using TheMovie.Service.Service.Client;
 using TheMovie.Service.ViewModel;
 
@@ -8,9 +9,6 @@ namespace TheMovie.Service.Service.Find
 {
     public class FindService : IFindService
     {
-        private const string PopulatiryDesc = "popularity.desc";
-        private const string VoteAverageDesc = "vote_average.desc";
-
         private readonly IMovieClient _movieClient;
 
         public FindService(IMovieClient movieClient)
@@ -25,7 +23,7 @@ namespace TheMovie.Service.Service.Find
                 Language = movieViewModel.Language,
                 DiscoverParams = new
                 {
-                    sort_by = VoteAverageDesc,
+                    sort_by = Constants.SortBy.VoteAverageDesc,
                     primary_release_year = movieViewModel.Year,
                     with_genres = movieViewModel.Genre
                 }
@@ -40,7 +38,7 @@ namespace TheMovie.Service.Service.Find
                 Language = movieViewModel.Language,
                 DiscoverParams = new
                 {
-                    sort_by = PopulatiryDesc,
+                    sort_by = Constants.SortBy.PopulatiryDesc,
                     with_genres = movieViewModel.Genre
                 }
             };
@@ -54,9 +52,24 @@ namespace TheMovie.Service.Service.Find
                 Language = movieViewModel.Language,
                 DiscoverParams = new
                 {
-                    sort_by = PopulatiryDesc,
+                    sort_by = Constants.SortBy.PopulatiryDesc,
                     primary_release_year = movieViewModel.Year,
                     with_genres = movieViewModel.Genre
+                }
+            };
+            return await _movieClient.DiscoverMoviesAsync(discoverViewModel);
+        }
+
+        public async Task<IEnumerable<ShortMovie>> GetSortMovieAsync(SortViewModel sortViewModel)
+        {
+            var discoverViewModel = new DiscoverViewModel
+            {
+                Language = sortViewModel.Language,
+                DiscoverParams = new
+                {
+                    sort_by = sortViewModel.SortBy,
+                    primary_release_year = sortViewModel.Year,
+                    with_genres = sortViewModel.Genre
                 }
             };
             return await _movieClient.DiscoverMoviesAsync(discoverViewModel);

@@ -12,5 +12,7 @@ namespace TheMovie.Service.Service.Find
         Task<IEnumerable<ShortMovie>> GetPopularMoviesByGenreWithYearAsync(MovieViewModel movieViewModel);
 
         Task<IEnumerable<ShortMovie>> GetBestMoviesByYearAsync(MovieViewModel movieViewModel);
+
+        Task<IEnumerable<ShortMovie>> GetSortMovieAsync(SortViewModel sortViewModel);
     }
 }

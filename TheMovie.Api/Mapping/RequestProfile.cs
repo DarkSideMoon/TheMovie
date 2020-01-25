@@ -16,6 +16,9 @@ namespace TheMovie.Api.Mapping
 
             CreateMap<GetRandomMovieRequest, RandomMovieViewModel>()
                 .IncludeBase<MovieRequest, MovieViewModel>();
+
+            CreateMap<SortMovieRequest, SortViewModel>()
+                .IncludeBase<MovieRequest, MovieViewModel>();
         }
     }
 }

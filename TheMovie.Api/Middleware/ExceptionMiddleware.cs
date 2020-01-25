@@ -25,13 +25,13 @@ namespace TheMovie.Api.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex, "Internal Server Error",
-                    StatusCodes.Status500InternalServerError).ConfigureAwait(false);
+                await HandleExceptionAsync(httpContext, ex, "Internal Server Error", 
+                    StatusCodes.Status500InternalServerError)
+                    .ConfigureAwait(false);
             }
         }
 
-        protected static Task HandleExceptionAsync(HttpContext context, Exception exception, string message,
-            int statusCode)
+        protected static Task HandleExceptionAsync(HttpContext context, Exception exception, string message, int statusCode)
         {
             Log.Warning(exception, message);
 

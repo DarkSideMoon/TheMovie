@@ -134,5 +134,24 @@ namespace TheMovie.Api.Controllers
             var movies = await _findService.GetBestMoviesByYearAsync(movieViewModel);
             return Ok(movies);
         }
+
+        /// <summary>
+        /// Get sort movie
+        /// </summary>
+        /// <param name="sortMovieRequest"></param>
+        /// <returns>Return best movie</returns>
+        /// <response code="200">Return movie</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet]
+        [Route("getSortMovie")]
+        [ProducesResponseType(typeof(List<ShortMovie>), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
+        public async Task<IActionResult> GetSortMovieAsync([FromQuery] SortMovieRequest sortMovieRequest)
+        {
+            var movieViewModel = _mapper.Map<SortViewModel>(sortMovieRequest);
+
+            var movies = await _findService.GetSortMovieAsync(movieViewModel);
+            return Ok(movies);
+        }
     }
 }
