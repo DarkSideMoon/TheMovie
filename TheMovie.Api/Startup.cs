@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using TheMovie.Api.Infrastructure;
+using TheMovie.Model.Common;
 using TheMovie.Model.Settings;
 
 namespace TheMovie.Api
@@ -10,6 +13,7 @@ namespace TheMovie.Api
     {
         private const string MovieSettings = "MovieSettings";
         private const string HealthEndpoint = "/healthz";
+        private const string AppStartedLog = "App {0} has been started";
 
         public Startup(IConfiguration configuration)
         {
@@ -40,7 +44,7 @@ namespace TheMovie.Api
             services.AddHttpClientService();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             app.UseHttpsRedirection();
 
@@ -55,6 +59,11 @@ namespace TheMovie.Api
 
             // Configure swagger
             app.AddSwagger();
+
+            applicationLifetime.ApplicationStarted.Register(() =>
+            {
+                Log.Information(string.Format(AppStartedLog, Constants.App.Name));
+            });
         }
     }
 }

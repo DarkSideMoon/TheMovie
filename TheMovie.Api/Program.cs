@@ -1,24 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using System.IO;
+using TheMovie.Model.Common;
 
 namespace TheMovie.Api
 {
     public class Program
     {
+        private const string AppSettings = "appsettings.json";
+        private const string AppSettingsEnv = "appsettings.{0}.json";
+        
+
+        private static string _environmentName;
+
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var webHost = CreateWebHostBuilder(args);
+
+            var configiration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(AppSettings)
+                .AddJsonFile(string.Format(AppSettingsEnv, _environmentName), optional: true, reloadOnChange: true)
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configiration)
+                .CreateLogger();
+
+            webHost.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            .ConfigureLogging((hostingContext, config) =>
+            {
+                config.ClearProviders();
+                _environmentName = hostingContext.HostingEnvironment.EnvironmentName;
+            })
+            .UseSerilog()
+            .UseStartup<Startup>()
+            .Build();
     }
 }

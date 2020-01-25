@@ -8,5 +8,10 @@
             
             public const string Language = "language";
         }
+
+        public static class App
+        {
+            public const string Name = "The movie";
+        }
     }
 }
