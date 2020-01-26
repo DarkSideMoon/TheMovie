@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using TheMovie.Model.Common;
+using TheMovie.Model.Exceptions;
 
 namespace TheMovie.Api.Middleware
 {
     public class ExceptionMiddleware
     {
+        private static readonly string InternalServerErrorMessage = "Internal Server Error";
+        private static readonly string MovieClientErrorMessage = "Movie Client Error";
+
         private readonly RequestDelegate _next;
 
         public ExceptionMiddleware(RequestDelegate next)
@@ -23,9 +28,16 @@ namespace TheMovie.Api.Middleware
             {
                 await _next(httpContext);
             }
+            catch (MovieClientException movieClientException)
+            {
+                await HandleExceptionAsync(httpContext, movieClientException,
+                    MovieClientErrorMessage, 
+                    StatusCodes.Status500InternalServerError)
+                    .ConfigureAwait(false);
+            }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex, "Internal Server Error", 
+                await HandleExceptionAsync(httpContext, ex, InternalServerErrorMessage, 
                     StatusCodes.Status500InternalServerError)
                     .ConfigureAwait(false);
             }
@@ -36,7 +48,7 @@ namespace TheMovie.Api.Middleware
             Log.Warning(exception, message);
 
             context.Response.StatusCode = statusCode;
-            context.Response.ContentType = "application/json";
+            context.Response.ContentType = MediaTypeNames.Application.Json;
 
             var errorResponse = CreateErrorResponse(context, message);
             var errorResponseJson = JsonConvert.SerializeObject(errorResponse,
