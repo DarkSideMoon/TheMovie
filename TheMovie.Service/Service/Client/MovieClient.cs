@@ -37,7 +37,7 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel)
         {
-            var storageMovie = _movieMemoryStorage.Get(movieViewModel.Id.ToString());
+            var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
 
             if (storageMovie != null)
                 return storageMovie;
@@ -55,7 +55,7 @@ namespace TheMovie.Service.Service.Client
             var response = await responseMessage.Content.ReadAsStringAsync();
             var movie = JsonConvert.DeserializeObject<Movie>(response);
 
-            _movieMemoryStorage.Set(movie.Id.ToString(), movie);
+            await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
             return movie;
         }
 

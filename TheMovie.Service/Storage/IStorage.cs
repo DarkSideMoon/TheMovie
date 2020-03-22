@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
 
 namespace TheMovie.Service.Storage
 {
     public interface IStorage<TItem>
     {
-        void Set(string key, TItem item, MemoryCacheEntryOptions entryOptions = default);
+        Task Set(string key, TItem item, MemoryDistributedCacheOptions entryOptions = default);
 
-        TItem Get(string key, MemoryCacheEntryOptions entryOptions = default);
+        Task<TItem> Get(string key, MemoryDistributedCacheOptions entryOptions = default);
 
-        TItem GetorSet(string key, TItem item, MemoryCacheEntryOptions entryOptions = default);
+        Task<TItem> GetorSet(string key, TItem item, MemoryDistributedCacheOptions entryOptions = default);
     }
 }
