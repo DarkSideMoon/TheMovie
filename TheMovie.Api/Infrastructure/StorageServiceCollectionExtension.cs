@@ -14,7 +14,7 @@ namespace TheMovie.Api.Infrastructure
 
             var memoryCache = services.BuildServiceProvider().GetRequiredService<IMemoryCache>();
 
-            services.AddSingleton(x => new InMemoryStorage<Movie>(memoryCache));
+            services.AddSingleton<IStorage<Movie>>(x => new InMemoryStorage<Movie>(memoryCache));
             return services;
         }
     }

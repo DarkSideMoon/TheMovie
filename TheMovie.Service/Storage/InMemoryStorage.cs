@@ -22,6 +22,8 @@ namespace TheMovie.Service.Storage
             return _memoryCache.Set(key, item);
         }
 
-        public void Set(TItem item, MemoryCacheEntryOptions entryOptions = null) => _memoryCache.Set(Guid.NewGuid().ToString(), item, entryOptions);
+        public TItem Get(string key, MemoryCacheEntryOptions entryOptions = null) => _memoryCache.Get<TItem>(key);
+
+        public void Set(string key, TItem item, MemoryCacheEntryOptions entryOptions = null) => _memoryCache.Set(key, item, entryOptions);
     }
 }
