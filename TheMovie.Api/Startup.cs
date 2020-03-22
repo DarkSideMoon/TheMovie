@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using TheMovie.Api.Infrastructure;
+using TheMovie.Api.Middleware;
 using TheMovie.Model.Common;
 using TheMovie.Model.Settings;
 
@@ -47,6 +48,8 @@ namespace TheMovie.Api
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseRouting();
 

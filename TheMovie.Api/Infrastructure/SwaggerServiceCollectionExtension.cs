@@ -28,7 +28,7 @@ namespace TheMovie.Api.Infrastructure
                 {
                     Version = "v1",
                     Title = "Movie Service API",
-                    Description = "Dou calendar api to use from site dou.ua",
+                    Description = "Movie service api",
                     License = new OpenApiLicense
                     {
                         Name = "Use under MIT licenses",
