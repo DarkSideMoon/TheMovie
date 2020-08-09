@@ -12,12 +12,10 @@ namespace TheMovie.Api.Infrastructure
             // Add redis cache
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:6379";
+                options.Configuration = "localhost:6379"; // TODO: From config
             });
 
-            var memoryCache = services.BuildServiceProvider().GetRequiredService<IDistributedCache>();
-
-            services.AddSingleton<IStorage<Movie>>(x => new RedisStorage<Movie>(memoryCache));
+            services.AddSingleton<IStorage<Movie>>(x => new RedisStorage<Movie>(x.GetRequiredService<IDistributedCache>()));
             return services;
         }
     }
