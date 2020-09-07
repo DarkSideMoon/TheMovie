@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using TheMovie.Api.Configuration;
 using TheMovie.Api.Infrastructure;
 using TheMovie.Api.Middleware;
 using TheMovie.Model.Common;
@@ -12,10 +13,6 @@ namespace TheMovie.Api
 {
     public class Startup
     {
-        private readonly static string MovieSettings = "MovieSettings";
-        private readonly static string HealthEndpoint = "/healthz";
-        private readonly static string AppStartedLog = "App {0} has been started";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,12 +22,14 @@ namespace TheMovie.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var serviceConfig = Configuration.GetSection(Constants.Service.ServiceSettings).Get<ServiceConfiguration>();
+
             services.AddControllers();
 
             // Registers health checks services
-            services.AddHealthChecks(); 
+            services.AddHealthChecks();
 
-            services.AddSingleton(options => Configuration.GetSection(MovieSettings).Get<MovieSettings>());
+            services.AddSingleton(new MovieSettings(serviceConfig.Movie.ApiKey, serviceConfig.Movie.BaseUrl));
 
             // Add own services
             services.AddMovieClientService();
@@ -43,6 +42,9 @@ namespace TheMovie.Api
 
             // Add http client service
             services.AddHttpClientService();
+
+            // Add Open telemetry
+            services.AddOpenTelemetryService(serviceConfig);
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
@@ -58,14 +60,14 @@ namespace TheMovie.Api
                 endpoints.MapControllers();
             });
 
-            app.UseHealthChecks(HealthEndpoint);
+            app.UseHealthChecks(Constants.Service.HealthEndpoint);
 
             // Configure swagger
             app.AddSwagger();
 
             applicationLifetime.ApplicationStarted.Register(() =>
             {
-                Log.Information(string.Format(AppStartedLog, Constants.App.Name));
+                Log.Information(string.Format(Constants.Service.AppStartedLog, Constants.App.Name));
             });
         }
     }

@@ -24,5 +24,14 @@
 
             public readonly static string VoteCountDesc = "vote_count.desc";
         }
+
+        public static class Service
+        {
+            public readonly static string ServiceSettings = "service";
+
+            public readonly static string HealthEndpoint = "/healthz";
+
+            public readonly static string AppStartedLog = "App {0} has been started";
+        }
     }
 }
