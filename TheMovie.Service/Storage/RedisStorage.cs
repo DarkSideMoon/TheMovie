@@ -15,7 +15,7 @@ namespace TheMovie.Service.Storage
             _redisCache = redisCache;
         }
 
-        public async Task<TItem> GetorSet(string key, TItem item, MemoryDistributedCacheOptions entryOptions = null)
+        public async Task<TItem> GetorSet(string key, TItem item)
         {
             var byteArrayObj = await _redisCache.GetAsync(key);
 
@@ -32,7 +32,7 @@ namespace TheMovie.Service.Storage
             return item;
         }
 
-        public async Task<TItem> Get(string key, MemoryDistributedCacheOptions entryOptions = null)
+        public async Task<TItem> Get(string key)
         {
             var stringObj = await _redisCache.GetStringAsync(key);
             if (!string.IsNullOrEmpty(stringObj))
@@ -43,41 +43,12 @@ namespace TheMovie.Service.Storage
             return default;
         }
 
-        public async Task Set(string key, TItem item, MemoryDistributedCacheOptions entryOptions = null) 
+        public async Task Set(string key, TItem item) 
         {
             var serializedStringObj = JsonConvert.SerializeObject(item);
             var byteArray = Encoding.UTF8.GetBytes(serializedStringObj);
 
             await _redisCache.SetAsync(key, byteArray); 
         }
-
-        #region Redis Get and Save data as string
-
-        //public async Task<TItem> GetorSet(string key, TItem item, MemoryDistributedCacheOptions entryOptions = null)
-        //{
-        //    var stringObj = await _redisCache.GetStringAsync(key);
-
-        //    if (!string.IsNullOrEmpty(stringObj))
-        //    {
-        //        return JsonConvert.DeserializeObject<TItem>(stringObj);
-        //    }
-
-        //    await _redisCache.SetStringAsync(key, JsonConvert.SerializeObject(item));
-        //    return item;
-        //}
-
-        //public async Task<TItem> Get(string key, MemoryDistributedCacheOptions entryOptions = null)
-        //{
-        //    var stringObj = await _redisCache.GetStringAsync(key);
-        //    if (!string.IsNullOrEmpty(stringObj))
-        //    {
-        //        return JsonConvert.DeserializeObject<TItem>(stringObj);
-        //    }
-
-        //    return default;
-        //}
-
-        //public async Task Set(string key, TItem item, MemoryDistributedCacheOptions entryOptions = null) => await _redisCache.SetStringAsync(key, JsonConvert.SerializeObject(item));
-        #endregion
     }
 }

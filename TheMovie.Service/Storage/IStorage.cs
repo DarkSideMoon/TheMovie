@@ -5,10 +5,10 @@ namespace TheMovie.Service.Storage
 {
     public interface IStorage<TItem>
     {
-        Task Set(string key, TItem item, MemoryDistributedCacheOptions entryOptions = default);
+        Task Set(string key, TItem item);
 
-        Task<TItem> Get(string key, MemoryDistributedCacheOptions entryOptions = default);
+        Task<TItem> Get(string key);
 
-        Task<TItem> GetorSet(string key, TItem item, MemoryDistributedCacheOptions entryOptions = default);
+        Task<TItem> GetorSet(string key, TItem item);
     }
 }
