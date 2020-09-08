@@ -45,6 +45,9 @@ namespace TheMovie.Api
 
             // Add Open telemetry
             services.AddOpenTelemetryService(serviceConfig);
+            
+            // Add memory cache
+            services.AddinMemoryStorage();
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)

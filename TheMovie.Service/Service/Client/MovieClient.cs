@@ -7,6 +7,7 @@ using TheMovie.Model.Base;
 using TheMovie.Model.Exceptions;
 using TheMovie.Model.Settings;
 using TheMovie.Service.Builder;
+using TheMovie.Service.Storage;
 using TheMovie.Service.ViewModel;
 
 namespace TheMovie.Service.Service.Client
@@ -22,17 +23,25 @@ namespace TheMovie.Service.Service.Client
         private const string GetGenresUrl = "genre/movie/list";
 
         private readonly HttpClient _httpClient;
-
+        private readonly IStorage<Movie> _movieMemoryStorage;
         private readonly MovieSettings _movieSettings;
 
-        public MovieClient(HttpClient httpClient, MovieSettings movieSettings)
+        public MovieClient(HttpClient httpClient, 
+            IStorage<Movie> movieMemoryStorage,
+            MovieSettings movieSettings)
         {
             _httpClient = httpClient;
             _movieSettings = movieSettings;
+            _movieMemoryStorage = movieMemoryStorage;
         }
 
         public async Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel)
         {
+            var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
+
+            if (storageMovie != null)
+                return storageMovie;
+
             var completeUrl = _movieSettings.BaseUrl + GetMovieUrl;
             var getMovieUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
                 .SetApiKey(_movieSettings.ApiKey)
@@ -44,7 +53,10 @@ namespace TheMovie.Service.Service.Client
                 throw new MovieClientException();
 
             var response = await responseMessage.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Movie>(response);
+            var movie = JsonConvert.DeserializeObject<Movie>(response);
+
+            await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
+            return movie;
         }
 
         public async Task<IEnumerable<ShortMovie>> DiscoverMoviesAsync(DiscoverViewModel discoverViewModel)

@@ -45,7 +45,7 @@ namespace TheMovie.Api.Middleware
 
         protected static Task HandleExceptionAsync(HttpContext context, Exception exception, string message, int statusCode)
         {
-            Log.Warning(exception, message);
+            Log.Error(exception, message);
 
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = MediaTypeNames.Application.Json;
