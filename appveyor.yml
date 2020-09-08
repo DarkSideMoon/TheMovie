@@ -8,10 +8,10 @@ install:
   - ps: dotnet tool install --global dotnet-sonarscanner
 
 build_script:
-  - ps: dotnet sonarscanner begin /key:"TheMovie" /organization:"darksidemoon" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:SONAR_TOKEN" /v:"%APPVEYOR_BUILD_NUMBER%" /d:sonar.cs.opencover.reportsPaths="%CD%\coverage.xml"
+  - ps: 'if (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) { & dotnet sonarscanner begin /key:"TheMovie" /organization:"darksidemoon" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:SONAR_TOKEN" /v:"%APPVEYOR_BUILD_NUMBER%" /d:sonar.cs.opencover.reportsPaths="%CD%\coverage.xml" }'
   - ps: dotnet --info
   - ps: dotnet restore TheMovie.sln
   - ps: dotnet build TheMovie.sln
-  - ps: dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
+  - ps: 'if (-Not $env:APPVEYOR_PULL_REQUEST_NUMBER) { & dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN" }'
 
 version: 0.0.1.{build}

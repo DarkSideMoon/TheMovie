@@ -43,6 +43,9 @@ namespace TheMovie.Api
 
             // Add http client service
             services.AddHttpClientService();
+
+            // Add memory cache
+            services.AddinMemoryStorage();
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
