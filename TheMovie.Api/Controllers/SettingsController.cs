@@ -58,7 +58,7 @@ namespace TheMovie.Api.Controllers
         [Route("genres")]
         [ProducesResponseType(typeof(List<Genre>), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public async Task<IActionResult> GetGenres(GetGenresRequest getGenresRequest)
+        public async Task<IActionResult> GetGenres([FromQuery] GetGenresRequest getGenresRequest)
         {
             var genreViewModel = _mapper.Map<GenreViewModel>(getGenresRequest);
 

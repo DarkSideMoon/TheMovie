@@ -29,9 +29,16 @@
         {
             public readonly static string ServiceSettings = "service";
 
+            public readonly static string RedisSettings = "service:redis";
+
             public readonly static string HealthEndpoint = "/healthz";
 
             public readonly static string AppStartedLog = "App {0} has been started";
+        }
+
+        public static class Tracing
+        {
+            public readonly static string TraceName = "TheMovie";
         }
     }
 }

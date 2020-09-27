@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +24,7 @@ namespace TheMovie.Api
         public void ConfigureServices(IServiceCollection services)
         {
             var serviceConfig = Configuration.GetSection(Constants.Service.ServiceSettings).Get<ServiceConfiguration>();
+            services.Configure<RedisConfiguration>(Configuration.GetSection(Constants.Service.RedisSettings));
 
             services.AddControllers();
 
@@ -47,7 +49,10 @@ namespace TheMovie.Api
             services.AddOpenTelemetryService(serviceConfig);
             
             // Add memory cache
-            services.AddinMemoryStorage();
+            services.AddInMemoryStorage(serviceConfig.Redis.ConnectionString);
+
+            // Add health checks
+            services.AddHealthChecksService();
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
@@ -67,6 +72,11 @@ namespace TheMovie.Api
 
             // Configure swagger
             app.AddSwagger();
+
+            app.UseHealthChecks("/liveness", new HealthCheckOptions
+            {
+                Predicate = (check) => check.Tags.Contains("health")
+            });
 
             applicationLifetime.ApplicationStarted.Register(() =>
             {

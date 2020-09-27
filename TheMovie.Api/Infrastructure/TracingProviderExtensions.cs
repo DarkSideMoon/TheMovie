@@ -2,10 +2,11 @@
 using OpenTelemetry.Trace;
 using System;
 using TheMovie.Api.Configuration;
+using TheMovie.Service.Trace;
 
 namespace TheMovie.Api.Infrastructure
 {
-    public static class MetricsProviderExtensions
+    public static class TracingProviderExtensions
     {
         /// <summary>
         /// Add open telemetry dependecies
@@ -18,10 +19,11 @@ namespace TheMovie.Api.Infrastructure
             switch (configuration.OpenTelemetry.Exporter)
             {
                 case "jaeger":
-                    services.AddOpenTelemetry((builder) => builder
+                    services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .UseJaegerExporter(o =>
+                        .AddProcessor(new TheMovieEnrichingProcessor())
+                        .AddJaegerExporter(o =>
                         {
                             o.ServiceName = configuration.OpenTelemetry.Jaeger.ServiceName;
                             o.AgentHost = configuration.OpenTelemetry.Jaeger.Host;
@@ -29,20 +31,20 @@ namespace TheMovie.Api.Infrastructure
                         }));
                     break;
                 case "zipkin":
-                    services.AddOpenTelemetry((builder) => builder
+                    services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .UseZipkinExporter(o =>
+                        .AddZipkinExporter(o =>
                         {
                             o.ServiceName = configuration.OpenTelemetry.Zipkin.ServiceName;
                             o.Endpoint = new Uri(configuration.OpenTelemetry.Zipkin.Endpoint);
                         }));
                     break;
                 default:
-                    services.AddOpenTelemetry((builder) => builder
+                    services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
                         .AddHttpClientInstrumentation()
-                        .UseConsoleExporter());
+                        .AddConsoleExporter());
                     break;
             }
         }

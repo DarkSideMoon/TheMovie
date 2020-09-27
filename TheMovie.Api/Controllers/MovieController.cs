@@ -34,19 +34,22 @@ namespace TheMovie.Api.Controllers
         /// <summary>
         /// Get Movie by id
         /// </summary>
-        /// <param name="movieRequest">Id of movie</param>
+        /// <remarks>
+        /// ### Example: Id 299536 ###
+        /// </remarks>
+        /// <param name="id">Id of movie</param>
         /// <returns>Return movie by id</returns>
         /// <response code="200">Return movie</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(Movie), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public async Task<IActionResult> Get([FromQuery] BaseMovieRequest movieRequest)
+        public async Task<IActionResult> Get(int id)
         {
             var movie = await _movieClient.GetMovieAsync(
                 new BaseMovieViewModel
                 {
-                    Id = movieRequest.Id,
+                    Id = id,
                     Language = LanguageType.English
                 });
             return Ok(movie);

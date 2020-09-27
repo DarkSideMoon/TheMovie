@@ -7,12 +7,12 @@ namespace TheMovie.Api.Infrastructure
 {
     public static class StorageServiceCollectionExtension
     {
-        public static IServiceCollection AddinMemoryStorage(this IServiceCollection services)
+        public static IServiceCollection AddInMemoryStorage(this IServiceCollection services, string redisConnectionString)
         {
             // Add redis cache
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:6379"; // TODO: From config
+                options.Configuration = redisConnectionString;
             });
 
             services.AddSingleton<IStorage<Movie>>(x => new RedisStorage<Movie>(x.GetRequiredService<IDistributedCache>()));

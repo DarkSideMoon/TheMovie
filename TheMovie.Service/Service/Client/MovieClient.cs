@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenTelemetry.Trace;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TheMovie.Model.Base;
+using TheMovie.Model.Common;
 using TheMovie.Model.Exceptions;
 using TheMovie.Model.Settings;
 using TheMovie.Service.Builder;
@@ -37,10 +40,10 @@ namespace TheMovie.Service.Service.Client
 
         public async Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel)
         {
-            var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
+            //var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
 
-            if (storageMovie != null)
-                return storageMovie;
+            //if (storageMovie != null)
+            //    return storageMovie;
 
             var completeUrl = _movieSettings.BaseUrl + GetMovieUrl;
             var getMovieUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
@@ -48,14 +51,20 @@ namespace TheMovie.Service.Service.Client
                 .SetLanguage(movieViewModel.Language)
                 .Build();
 
-            var responseMessage = await _httpClient.GetAsync(getMovieUri);
+            HttpResponseMessage responseMessage = null;
+            using (var source = new ActivitySource($"{Constants.Tracing.TraceName}.{nameof(GetMovieAsync)}")
+                .StartActivity("Get moview http request"))
+            {
+                responseMessage = await _httpClient.GetAsync(getMovieUri);
+            }
+
             if (!responseMessage.IsSuccessStatusCode)
                 throw new MovieClientException();
 
             var response = await responseMessage.Content.ReadAsStringAsync();
             var movie = JsonConvert.DeserializeObject<Movie>(response);
 
-            await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
+            //await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
             return movie;
         }
 
