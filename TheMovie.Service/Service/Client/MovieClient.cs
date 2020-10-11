@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using App.Metrics;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTelemetry.Trace;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using TheMovie.Model.Common;
 using TheMovie.Model.Exceptions;
 using TheMovie.Model.Settings;
 using TheMovie.Service.Builder;
+using TheMovie.Service.Metrics;
 using TheMovie.Service.Storage;
 using TheMovie.Service.ViewModel;
 
@@ -28,44 +30,53 @@ namespace TheMovie.Service.Service.Client
         private readonly HttpClient _httpClient;
         private readonly IStorage<Movie> _movieMemoryStorage;
         private readonly MovieSettings _movieSettings;
+        private readonly IMetrics _metrics;
 
         public MovieClient(HttpClient httpClient, 
             IStorage<Movie> movieMemoryStorage,
-            MovieSettings movieSettings)
+            MovieSettings movieSettings,
+            IMetrics metrics)
         {
             _httpClient = httpClient;
             _movieSettings = movieSettings;
             _movieMemoryStorage = movieMemoryStorage;
+            _metrics = metrics;
         }
 
         public async Task<Movie> GetMovieAsync(BaseMovieViewModel movieViewModel)
         {
-            //var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
+            var process = Process.GetCurrentProcess();
+            _metrics.Measure.Gauge.SetValue(MetricsRegistry.ServiceMemory, process.WorkingSet64 / 1024.0 / 1024.0);
 
-            //if (storageMovie != null)
-            //    return storageMovie;
-
-            var completeUrl = _movieSettings.BaseUrl + GetMovieUrl;
-            var getMovieUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
-                .SetApiKey(_movieSettings.ApiKey)
-                .SetLanguage(movieViewModel.Language)
-                .Build();
-
-            HttpResponseMessage responseMessage = null;
-            using (var source = new ActivitySource($"{Constants.Tracing.TraceName}.{nameof(GetMovieAsync)}")
-                .StartActivity("Get moview http request"))
+            using (_metrics.Measure.Timer.Time(MetricsRegistry.MovieRequestTimer))
             {
-                responseMessage = await _httpClient.GetAsync(getMovieUri);
+                //var storageMovie = await _movieMemoryStorage.Get(movieViewModel.Id.ToString());
+
+                //if (storageMovie != null)
+                //    return storageMovie;
+
+                var completeUrl = _movieSettings.BaseUrl + GetMovieUrl;
+                var getMovieUri = new UrlBuilder(string.Format(completeUrl, movieViewModel.Id))
+                    .SetApiKey(_movieSettings.ApiKey)
+                    .SetLanguage(movieViewModel.Language)
+                    .Build();
+
+                HttpResponseMessage responseMessage = null;
+                using (var source = new ActivitySource($"{Constants.Tracing.TraceName}.{nameof(GetMovieAsync)}")
+                    .StartActivity("Get moview http request"))
+                {
+                    responseMessage = await _httpClient.GetAsync(getMovieUri);
+                }
+
+                if (!responseMessage.IsSuccessStatusCode)
+                    throw new MovieClientException();
+
+                var response = await responseMessage.Content.ReadAsStringAsync();
+                var movie = JsonConvert.DeserializeObject<Movie>(response);
+
+                //await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
+                return movie;
             }
-
-            if (!responseMessage.IsSuccessStatusCode)
-                throw new MovieClientException();
-
-            var response = await responseMessage.Content.ReadAsStringAsync();
-            var movie = JsonConvert.DeserializeObject<Movie>(response);
-
-            //await _movieMemoryStorage.Set(movie.Id.ToString(), movie);
-            return movie;
         }
 
         public async Task<IEnumerable<ShortMovie>> DiscoverMoviesAsync(DiscoverViewModel discoverViewModel)

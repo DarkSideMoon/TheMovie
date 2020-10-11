@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using App.Metrics;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using TheMovie.Api.Configuration;
+using TheMovie.Service.Metrics;
 
 namespace TheMovie.Api.HealthChecks
 {
@@ -13,10 +15,12 @@ namespace TheMovie.Api.HealthChecks
     {
         private static readonly ConcurrentDictionary<string, ConnectionMultiplexer> _connections = new ConcurrentDictionary<string, ConnectionMultiplexer>();
         private readonly RedisConfiguration _redisConfiguration;
+        private readonly IMetrics _metrics;
 
-        public RedisHealthCheck(IOptions<RedisConfiguration> redisConfiguration)
+        public RedisHealthCheck(IOptions<RedisConfiguration> redisConfiguration, IMetrics metrics)
         {
             _redisConfiguration = redisConfiguration.Value;
+            _metrics = metrics;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
@@ -41,6 +45,7 @@ namespace TheMovie.Api.HealthChecks
             }
             catch (Exception ex)
             {
+                _metrics.Measure.Counter.Increment(MetricsRegistry.SimpleCounter);
                 return new HealthCheckResult(context.Registration.FailureStatus, exception: ex);
             }
         }

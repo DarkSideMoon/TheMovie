@@ -40,6 +40,7 @@ namespace TheMovie.Api
                 _environmentName = hostingContext.HostingEnvironment.EnvironmentName;
             })
             .UseSerilog()
+            .UseMetricsWebTracking()
             .UseStartup<Startup>()
             .Build();
     }

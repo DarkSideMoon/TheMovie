@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using App.Metrics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,10 +54,16 @@ namespace TheMovie.Api
 
             // Add health checks
             services.AddHealthChecksService();
+
+            // Add metrics for service
+            services.AddMetricsService();
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
+            app.UseMetricsAllMiddleware();
+            app.UseMetricsAllEndpoints();
+
             app.UseHttpsRedirection();
 
             app.UseMiddleware<ExceptionMiddleware>();
